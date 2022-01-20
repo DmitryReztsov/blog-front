@@ -1,7 +1,17 @@
 .header {
+  background-color: #f7f7f7;
+}
+.header__body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 2rem;
+}
+
+.logo {
+  color: #5cb85c;
+  font-weight: 700;
+  font-size: 1.5rem;
 }
 
 .nav {

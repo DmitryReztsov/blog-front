@@ -7,10 +7,11 @@ import Editor from "../pages/Editor/Editor";
 import Profile from "../pages/Profile/Profile";
 import Register from "../pages/Register/Register";
 import Login from "../pages/Login/Login";
+import './App.css'
 
 function App() {
   return (
-    <>
+    <div className={'app'}>
         <Routes>
             <Route path={"/"} element={<Layout/>}>
                 <Route index element={<Homepage/>}/>
@@ -21,7 +22,7 @@ function App() {
                 <Route path={"register"} element={<Register/>}/>
             </Route>
         </Routes>
-    </>
+    </div>
   );
 }
 
