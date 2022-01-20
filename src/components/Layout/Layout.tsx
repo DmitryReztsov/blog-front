@@ -1,16 +1,16 @@
 import React, {FC} from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
+import './Layout.css'
 
 const Layout: FC = () => {
     return (
-        <>
-            <h1>Yeah</h1>
-            <nav>
-                <Link to={"/"}>Home</Link>
-            </nav>
+        <div className={'layout'}>
+            <Header/>
             <Outlet/>
-        </>
-
+            <Footer/>
+        </div>
     );
 };
 
