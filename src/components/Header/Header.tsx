@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import './Header.css';
 import Container from "../Container/Container";
 
@@ -10,10 +10,10 @@ const Header: FC = () => {
                 <div className="header__body">
                     <h1 className="logo">conduit</h1>
                     <nav className="nav">
-                        <Link to={"/"}>Home</Link>
-                        <Link to={"/editor"}>New article</Link>
-                        <Link to={"/settings"}>Settings</Link>
-                        <Link to={"/profile"}>Profile</Link>
+                        <NavLink to={"/"}>Home</NavLink>
+                        <NavLink to={"/editor"}>New article</NavLink>
+                        <NavLink to={"/settings"}>Settings</NavLink>
+                        <NavLink to={"/profile"}>Profile</NavLink>
                     </nav>
                 </div>
             </Container>
