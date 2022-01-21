@@ -11,6 +11,8 @@ const Header: FC = () => {
                     <h1 className="logo">conduit</h1>
                     <nav className="nav">
                         <NavLink to={"/"}>Home</NavLink>
+                        <NavLink to={"/login"}>Sign in</NavLink>
+                        <NavLink to={"/register"}>Sign up</NavLink>
                         <NavLink to={"/editor"}>New article</NavLink>
                         <NavLink to={"/settings"}>Settings</NavLink>
                         <NavLink to={"/profile"}>Profile</NavLink>
