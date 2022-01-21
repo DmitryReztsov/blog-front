@@ -5,16 +5,31 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
-.logo {
+.header__logo {
   color: #5cb85c;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 2rem;
+}
+
+.header__link {
+  color: #888686;
+  transition: 0.2s all;
+}
+
+.header__link:hover {
+  color: #404040;
+  transition: 0.2s all;
 }
 
 .nav {
   display: flex;
   column-gap: 10px;
+}
+
+
+.active-link {
+  color: black;
 }

@@ -9,6 +9,13 @@
     padding: 1rem;
 }
 
-.footer_body p {
+.footer__text {
     color: #888686;
+    font-size: 0.8rem;
+}
+
+.footer__logo {
+    color: #5cb85c;
+    font-weight: 700;
+    font-size: 1rem;
 }
