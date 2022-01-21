@@ -6,14 +6,25 @@ export interface IUser {
     image: string,
 }
 
+export interface IUserError {
+    status: number,
+
+}
+
+export interface IUserState {
+    user: IUser,
+    loading: boolean,
+    error: IUserError,
+}
+
 export enum UserActionTypes {
     SET_USER = 'SET_USER',
     CLEAR_USER = 'CLEAR_USER',
 }
 
 export type SetUserAction = {
-    type: UserActionTypes.SET_USER
-    payload: {username: string, password: string}
+    type: UserActionTypes.SET_USER,
+    payload: IUser
 }
 
 export type ClearUserAction = {
