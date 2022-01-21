@@ -17,6 +17,7 @@
 .header__link {
   color: #888686;
   transition: 0.2s all;
+  margin: 0px 8px;
 }
 
 .header__link:hover {
@@ -24,12 +25,7 @@
   transition: 0.2s all;
 }
 
-.nav {
-  display: flex;
-  column-gap: 10px;
-}
-
-
 .active-link {
   color: black;
+  margin: 0px 8px;
 }
