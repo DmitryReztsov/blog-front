@@ -40,6 +40,10 @@
     border-radius: 4px;
 }
 
+.login__error {
+    color: red;
+}
+
 .login__form {
     display: flex;
     flex-direction: column;

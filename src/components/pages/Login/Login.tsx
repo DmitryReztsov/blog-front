@@ -1,13 +1,15 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Container from "../../Container/Container";
 import {Link, useNavigate} from "react-router-dom";
 import './Login.css'
 import {useDispatch} from "react-redux";
 import {setUser} from "../../../store/user/actions";
+import {useTypedSelector} from "../../../store/selectors";
 
 const Login: FC = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const {user,error} = useTypedSelector(state => state.user)
 
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -25,6 +27,11 @@ const Login: FC = () => {
         setPassword(e.currentTarget.value)
     }
 
+    useEffect(() => {
+        if (user) {
+            navigate('/')
+        }
+    },[user])
 
     return (
         <div className={'login'}>
@@ -32,6 +39,10 @@ const Login: FC = () => {
                 <div className={'login__body'}>
                     <h2 className={'login__header'}>Sign in</h2>
                     <Link className={'login__register-link'} to={"/register"}>Need an account?</Link>
+                    {error ?
+                        <p className={'login__error'}>{error.text}</p>
+                        : null
+                    }
                     <form className={'login__form'} onSubmit={submitHandler}>
                         <input
                             className={'login__input'}

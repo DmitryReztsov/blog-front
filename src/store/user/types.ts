@@ -8,18 +8,20 @@ export interface IUser {
 
 export interface IUserError {
     status: number,
-
+    text: string,
 }
 
 export interface IUserState {
-    user: IUser,
+    user: IUser | null,
     loading: boolean,
-    error: IUserError,
+    error: IUserError | null,
 }
 
 export enum UserActionTypes {
     SET_USER = 'SET_USER',
     CLEAR_USER = 'CLEAR_USER',
+    LOADING_USER = 'LOADING_USER',
+    ERROR_USER = 'ERROR_USER',
 }
 
 export type SetUserAction = {
@@ -31,4 +33,14 @@ export type ClearUserAction = {
     type: UserActionTypes.CLEAR_USER,
 }
 
-export type UserAction = SetUserAction | ClearUserAction;
+export type LoadingUserAction = {
+    type: UserActionTypes.LOADING_USER,
+}
+
+export type ErrorUserAction = {
+    type: UserActionTypes.ERROR_USER,
+    payload: IUserError,
+}
+
+
+export type UserAction = SetUserAction | ClearUserAction | LoadingUserAction | ErrorUserAction;

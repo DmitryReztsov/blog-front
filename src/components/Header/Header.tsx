@@ -5,7 +5,7 @@ import Container from "../Container/Container";
 import {useTypedSelector} from "../../store/selectors";
 
 const Header: FC = () => {
-    const user = useTypedSelector(state => state.user)
+    const {user} = useTypedSelector(state => state.user)
     return (
         <header className="header">
             <Container>
