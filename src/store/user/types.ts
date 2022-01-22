@@ -22,6 +22,7 @@ export enum UserActionTypes {
     CLEAR_USER = 'CLEAR_USER',
     LOADING_USER = 'LOADING_USER',
     ERROR_USER = 'ERROR_USER',
+    REGISTER_USER = 'REGISTER_USER',
 }
 
 export type SetUserAction = {
@@ -39,6 +40,11 @@ export type LoadingUserAction = {
 
 export type ErrorUserAction = {
     type: UserActionTypes.ERROR_USER,
+    payload: IUserError,
+}
+
+export type RegisterUserAction = {
+    type: UserActionTypes.REGISTER_USER,
     payload: IUserError,
 }
 

@@ -4,6 +4,9 @@ import {Link} from "react-router-dom";
 import './Register.css'
 
 const Register: FC = () => {
+
+
+
     return (
         <div className={'register'}>
             <Container>

@@ -1,4 +1,4 @@
-import {IUser, IUserError, IUserState, UserAction, UserActionTypes} from "./types";
+import {IUserState, UserAction, UserActionTypes} from "./types";
 
 const initialState: IUserState = {
     user: null,
@@ -19,6 +19,9 @@ export function userReducer(state: IUserState = initialState, action: UserAction
                 }
             }
         }
+        case UserActionTypes.CLEAR_USER: {
+            return state
+        }
         case UserActionTypes.LOADING_USER: {
             return {...state, loading: true, error: null}
         }
@@ -29,9 +32,6 @@ export function userReducer(state: IUserState = initialState, action: UserAction
                     text: action.payload.text
                 }
             }
-        }
-        case UserActionTypes.CLEAR_USER: {
-            return state
         }
         default: {
             return state
