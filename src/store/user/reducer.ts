@@ -11,11 +11,11 @@ export function userReducer(state: IUserState = initialState, action: UserAction
         case UserActionTypes.SET_USER: {
             return {
                 ...state, loading: false, user: {
-                    "email": action.payload.email,
-                    "token": action.payload.token,
-                    "username": action.payload.username,
-                    "bio": action.payload.bio,
-                    "image": action.payload.image,
+                    email: action.payload.email,
+                    token: action.payload.token,
+                    username: action.payload.username,
+                    bio: action.payload.bio,
+                    image: action.payload.image,
                 }
             }
         }

@@ -26,7 +26,7 @@ const Header: FC = () => {
                                     Settings
                                 </NavLink>
                                 <img src={user.image} alt="user-image" className={'user-image header_user-image'}/>
-                                <NavLink to={"/profile"}
+                                <NavLink to={`/profile/${user.username}`}
                                          className={({isActive}) => isActive ? 'active-link' : 'header__link'}>
                                     {user.username}
                                 </NavLink>

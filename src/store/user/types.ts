@@ -2,8 +2,8 @@ export interface IUser {
     username: string,
     email: string,
     token: string,
-    bio: string,
-    image: string,
+    bio?: string,
+    image?: string,
 }
 
 export interface IUserError {
@@ -45,8 +45,8 @@ export type ErrorUserAction = {
 
 export type RegisterUserAction = {
     type: UserActionTypes.REGISTER_USER,
-    payload: IUserError,
+    payload: IUser,
 }
 
 
-export type UserAction = SetUserAction | ClearUserAction | LoadingUserAction | ErrorUserAction;
+export type UserAction = SetUserAction | ClearUserAction | LoadingUserAction | ErrorUserAction | RegisterUserAction;
