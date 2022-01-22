@@ -2,13 +2,13 @@ export interface IUser {
     username: string,
     email: string,
     token: string,
-    bio?: string,
-    image?: string,
+    bio: string,
+    image: string,
 }
 
 export interface IUserError {
     status: number,
-    text: string,
+    text: string [],
 }
 
 export interface IUserState {
@@ -45,7 +45,6 @@ export type ErrorUserAction = {
 
 export type RegisterUserAction = {
     type: UserActionTypes.REGISTER_USER,
-    payload: IUser,
 }
 
 

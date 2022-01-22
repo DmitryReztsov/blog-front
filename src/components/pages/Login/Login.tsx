@@ -57,7 +57,13 @@ const Login: FC = () => {
                     <h2 className={'login__header'}>Sign in</h2>
                     <Link className={'login__register-link'} to={"/register"}>Need an account?</Link>
                     {error ?
-                        <p className={'login__error'}>{error.text}</p>
+                        <ul>
+                            {error.text.map((text) => {
+                                return <li className={'login__error'}>{text}</li>
+                            })
+                            }
+                        </ul>
+
                         : null
                     }
                     <form className={'login__form'} onSubmit={submitHandler}>

@@ -33,6 +33,11 @@ export function userReducer(state: IUserState = initialState, action: UserAction
                 }
             }
         }
+        case UserActionTypes.REGISTER_USER: {
+            return {
+                ...state, loading: false
+            }
+        }
         default: {
             return state
         }
