@@ -3,6 +3,7 @@ import {NavLink} from "react-router-dom";
 import './Header.css';
 import Container from "../Container/Container";
 import {useTypedSelector} from "../../store/selectors";
+import {URLS} from "../../utils/urls/urls";
 
 const Header: FC = () => {
     const {user} = useTypedSelector(state => state.user)
@@ -25,7 +26,7 @@ const Header: FC = () => {
                                          className={({isActive}) => isActive ? 'active-link' : 'header__link'}>
                                     Settings
                                 </NavLink>
-                                <img src={user.image} alt="user-image" className={'user-image header_user-image'}/>
+                                <img src={user.image || URLS.DEFAULT_LOGO} alt="user-image" className={'user-image header_user-image'}/>
                                 <NavLink to={`/profile/${user.username}`}
                                          className={({isActive}) => isActive ? 'active-link' : 'header__link'}>
                                     {user.username}
