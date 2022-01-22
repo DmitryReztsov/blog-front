@@ -1,4 +1,5 @@
 import React, {FC} from 'react';
+import './Container.css'
 
 interface IContainerProps {
     children: React.ReactNode [] | React.ReactNode,
@@ -6,7 +7,7 @@ interface IContainerProps {
 
 const Container: FC<IContainerProps> = ({children}) => {
     return (
-        <div style={{width:1200, margin: '0 auto'}}>
+        <div className={'container'}>
             {children}
         </div>
     );
