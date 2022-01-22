@@ -41,6 +41,16 @@
     border-radius: 4px;
 }
 
+.register__submit_disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.register__error {
+    color: red;
+    font-weight: 700;
+}
+
 .register__form {
     display: flex;
     flex-direction: column;

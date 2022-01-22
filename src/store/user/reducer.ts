@@ -1,4 +1,4 @@
-import {IUser, IUserError, IUserState, UserAction, UserActionTypes} from "./types";
+import {IUserState, UserAction, UserActionTypes} from "./types";
 
 const initialState: IUserState = {
     user: null,
@@ -11,13 +11,16 @@ export function userReducer(state: IUserState = initialState, action: UserAction
         case UserActionTypes.SET_USER: {
             return {
                 ...state, loading: false, user: {
-                    "email": action.payload.email,
-                    "token": action.payload.token,
-                    "username": action.payload.username,
-                    "bio": action.payload.bio,
-                    "image": action.payload.image,
+                    email: action.payload.email,
+                    token: action.payload.token,
+                    username: action.payload.username,
+                    bio: action.payload.bio,
+                    image: action.payload.image,
                 }
             }
+        }
+        case UserActionTypes.CLEAR_USER: {
+            return state
         }
         case UserActionTypes.LOADING_USER: {
             return {...state, loading: true, error: null}
@@ -30,8 +33,10 @@ export function userReducer(state: IUserState = initialState, action: UserAction
                 }
             }
         }
-        case UserActionTypes.CLEAR_USER: {
-            return state
+        case UserActionTypes.REGISTER_USER: {
+            return {
+                ...state, loading: false
+            }
         }
         default: {
             return state
