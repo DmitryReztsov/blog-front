@@ -38,10 +38,17 @@
     color: white;
     align-self: end;
     border-radius: 4px;
+    font-size: 1.2rem;
+}
+
+.login__submit_disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
 }
 
 .login__error {
     color: red;
+    font-weight: 700;
 }
 
 .login__form {

@@ -13,9 +13,11 @@ const Login: FC = () => {
 
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [disabled, setDisabled] = useState<boolean>(true)
 
     const submitHandler = (e:React.FormEvent<HTMLFormElement>) : void => {
         e.preventDefault();
+
         dispatch(setUser(email,password))
     }
 
@@ -27,11 +29,23 @@ const Login: FC = () => {
         setPassword(e.currentTarget.value)
     }
 
+    const getClassname = (disabled : boolean) : string => {
+        return disabled ? 'login__submit login__submit_disabled': 'login__submit'
+    }
+
     useEffect(() => {
         if (user) {
             navigate('/')
         }
     },[user])
+
+    useEffect(() => {
+        if (email && password) {
+            setDisabled(false)
+        } else {
+            setDisabled(true)
+        }
+    },[email,password])
 
     return (
         <div className={'login'}>
@@ -61,8 +75,9 @@ const Login: FC = () => {
                             onChange={passwordChangeHandler}
                         />
                         <button
-                            className={'login__submit'}
+                            className={getClassname(disabled)}
                             type={'submit'}
+                            disabled={disabled}
                         >
                             Sign in
                         </button>
