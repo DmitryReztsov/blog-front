@@ -77,8 +77,8 @@ export const registerUser = (username: string, email: string, password: string) 
 // пример тела: {"errors":{"email":["has already been taken"],"username":["has already been taken"]}}
 
 function parseError(error: any): string[] {
-  const objError = error['err/ors'];
-  const result = [];
+  const objError = error['errors'];
+  const result: string[] = [];
   // почему-то сервер возвращает ошибки в странном формате, иногда это массив, иногда просто строка,
   // поэтому делаем ветвление
   for (const key in objError) {
