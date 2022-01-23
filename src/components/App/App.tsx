@@ -9,6 +9,7 @@ import Register from '../pages/Register/Register';
 import Login from '../pages/Login/Login';
 import './App.css';
 import NotFound from '../pages/NotFound/NotFound';
+import RequireAuth from '../ReguireAuth/RequireAuth';
 
 function App() {
   return (
@@ -16,7 +17,14 @@ function App() {
       <Routes>
         <Route path={'/'} element={<Layout />}>
           <Route index element={<Homepage />} />
-          <Route path={'settings'} element={<Settings />} />
+          <Route
+            path={'settings'}
+            element={
+              <RequireAuth>
+                <Settings />
+              </RequireAuth>
+            }
+          />
           <Route path={'editor'} element={<Editor />} />
           <Route path={'profile/:username'} element={<Profile />} />
           <Route path={'login'} element={<Login />} />
