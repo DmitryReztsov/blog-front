@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Layout from '../Layout/Layout';
 import Homepage from '../pages/Homepage/Homepage';
@@ -10,8 +10,19 @@ import Login from '../pages/Login/Login';
 import './App.css';
 import NotFound from '../pages/NotFound/NotFound';
 import RequireAuth from '../ReguireAuth/RequireAuth';
+import { useTypedSelector } from '../../store/selectors';
+import { useDispatch } from 'react-redux';
+import { authUser } from '../../store/user/actions';
+import { getToken } from '../../utils/common/common';
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      dispatch(authUser(token));
+    }
+  }, []);
   return (
     <div className={'app'}>
       <Routes>

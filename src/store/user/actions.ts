@@ -23,9 +23,13 @@ export const setUser = (email: string, password: string) => {
 
       result = await response.json();
 
+      // если мы ввели неправильные данные...
       if (result.status === 422) {
         throw new Error();
       }
+
+      // сохраняем токен в куках для аутентификации пользователя
+      document.cookie = `jwtToken=${result.user.token}`;
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -59,9 +63,13 @@ export const registerUser = (username: string, email: string, password: string) 
 
       result = await response.json();
 
+      // если мы ввели неправильные данные...
       if (result.status === 422) {
         throw new Error();
       }
+
+      // сохраняем токен в куках для аутентификации пользователя
+      document.cookie = `jwtToken=${result.user.token}`;
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -69,6 +77,35 @@ export const registerUser = (username: string, email: string, password: string) 
         type: UserActionTypes.ERROR_USER,
         payload: { status: result.status, text: parseError(result) },
       });
+    }
+  };
+};
+
+export const authUser = (token: string) => {
+  return async (dispatch: Dispatch<UserAction>) => {
+    let result: any;
+    try {
+      const response = await fetch(getUrl(URLS.AUTH_URL), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      result = await response.json();
+
+      // если мы ввели неправильные данные...
+      if (result.status === 422) {
+        throw new Error();
+      }
+
+      // сохраняем токен в куках для аутентификации пользователя
+      document.cookie = `jwtToken=${result.user.token}`;
+
+      dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
+    } catch (e) {
+      console.log(e);
     }
   };
 };

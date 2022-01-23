@@ -44,6 +44,9 @@ export function userReducer(state: IUserState = initialState, action: UserAction
         loading: false,
       };
     }
+    case UserActionTypes.AUTH_USER: {
+      return state;
+    }
     default: {
       return state;
     }

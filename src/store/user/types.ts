@@ -23,6 +23,7 @@ export enum UserActionTypes {
   LOADING_USER = 'LOADING_USER',
   ERROR_USER = 'ERROR_USER',
   REGISTER_USER = 'REGISTER_USER',
+  AUTH_USER = 'AUTH_USER',
 }
 
 export type SetUserAction = {
@@ -47,9 +48,14 @@ export type RegisterUserAction = {
   type: UserActionTypes.REGISTER_USER;
 };
 
+export type AuthUserAction = {
+  type: UserActionTypes.AUTH_USER;
+};
+
 export type UserAction =
   | SetUserAction
   | ClearUserAction
   | LoadingUserAction
   | ErrorUserAction
-  | RegisterUserAction;
+  | RegisterUserAction
+  | AuthUserAction;
