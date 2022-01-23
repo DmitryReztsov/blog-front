@@ -110,6 +110,12 @@ export const authUser = (token: string) => {
   };
 };
 
+export const clearUser = () => {
+  // очищаем куки перед разлогированием!
+  document.cookie = 'jwtToken' + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  return { type: UserActionTypes.CLEAR_USER };
+};
+
 // парсим тело ответа, если что-то пошло не так
 // пример тела: {"errors":{"email":["has already been taken"],"username":["has already been taken"]}}
 

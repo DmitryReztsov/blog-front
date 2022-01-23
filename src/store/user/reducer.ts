@@ -22,7 +22,7 @@ export function userReducer(state: IUserState = initialState, action: UserAction
       };
     }
     case UserActionTypes.CLEAR_USER: {
-      return state;
+      return initialState;
     }
     case UserActionTypes.LOADING_USER: {
       return { ...state, loading: true, error: null };
@@ -43,9 +43,6 @@ export function userReducer(state: IUserState = initialState, action: UserAction
         ...state,
         loading: false,
       };
-    }
-    case UserActionTypes.AUTH_USER: {
-      return state;
     }
     default: {
       return state;
