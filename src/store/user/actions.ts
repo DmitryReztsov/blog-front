@@ -5,6 +5,7 @@ import { getUrl, URLS } from '../../utils/urls/urls';
 export const setUser = (email: string, password: string) => {
   return async (dispatch: Dispatch<UserAction>) => {
     let result: any;
+    // формируем объект для тела запроса
     const user = {
       user: {
         email: email,
@@ -16,6 +17,7 @@ export const setUser = (email: string, password: string) => {
       const response = await fetch(getUrl(URLS.LOGIN_URL), {
         method: 'POST',
         headers: {
+          // обязательно указываем что отправляем json
           'Content-Type': 'application/json;charset=utf-8',
         },
         body: JSON.stringify(user),
@@ -23,9 +25,13 @@ export const setUser = (email: string, password: string) => {
 
       result = await response.json();
 
+      // если мы ввели неправильные данные...
       if (result.status === 422) {
         throw new Error();
       }
+
+      // сохраняем токен в куках для аутентификации пользователя
+      document.cookie = `jwtToken=${result.user.token}`;
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -59,9 +65,13 @@ export const registerUser = (username: string, email: string, password: string) 
 
       result = await response.json();
 
+      // если мы ввели неправильные данные...
       if (result.status === 422) {
         throw new Error();
       }
+
+      // сохраняем токен в куках для аутентификации пользователя
+      document.cookie = `jwtToken=${result.user.token}`;
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -71,6 +81,41 @@ export const registerUser = (username: string, email: string, password: string) 
       });
     }
   };
+};
+
+export const authUser = (token: string) => {
+  return async (dispatch: Dispatch<UserAction>) => {
+    let result: any;
+    try {
+      const response = await fetch(getUrl(URLS.AUTH_URL), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Token ${token}`,
+        },
+      });
+
+      result = await response.json();
+
+      // если мы ввели неправильные данные...
+      if (result.status === 422) {
+        throw new Error();
+      }
+
+      // сохраняем токен в куках для аутентификации пользователя
+      document.cookie = `jwtToken=${result.user.token}`;
+
+      dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
+
+export const clearUser = () => {
+  // очищаем куки перед разлогированием!
+  document.cookie = 'jwtToken' + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  return { type: UserActionTypes.CLEAR_USER };
 };
 
 // парсим тело ответа, если что-то пошло не так

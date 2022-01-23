@@ -1,14 +1,25 @@
 import React, { FC, useEffect, useState } from 'react';
 import Container from '../../Container/Container';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Login.css';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../../store/user/actions';
 import { useTypedSelector } from '../../../store/selectors';
+import { Type } from 'typescript';
+
+interface CustomizedState {
+  from: string;
+}
 
 const Login: FC = () => {
   const dispatch = useDispatch();
+
+  // обработка редиректа на прошлую страницу или главную
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state as CustomizedState;
+  const from = state?.from || '/';
+
   const { user, error } = useTypedSelector((state) => state.user);
 
   const [email, setEmail] = useState<string>('');
@@ -35,7 +46,7 @@ const Login: FC = () => {
 
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate(from, { replace: true });
     }
   }, [user]);
 

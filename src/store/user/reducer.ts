@@ -22,7 +22,7 @@ export function userReducer(state: IUserState = initialState, action: UserAction
       };
     }
     case UserActionTypes.CLEAR_USER: {
-      return state;
+      return initialState;
     }
     case UserActionTypes.LOADING_USER: {
       return { ...state, loading: true, error: null };
