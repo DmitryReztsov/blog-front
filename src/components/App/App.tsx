@@ -10,19 +10,21 @@ import Login from '../pages/Login/Login';
 import './App.css';
 import NotFound from '../pages/NotFound/NotFound';
 import RequireAuth from '../ReguireAuth/RequireAuth';
-import { useTypedSelector } from '../../store/selectors';
 import { useDispatch } from 'react-redux';
 import { authUser } from '../../store/user/actions';
 import { getToken } from '../../utils/common/common';
 
 function App() {
   const dispatch = useDispatch();
+
+  // Аутентификация
   useEffect(() => {
     const token = getToken();
     if (token) {
       dispatch(authUser(token));
     }
   }, []);
+
   return (
     <div className={'app'}>
       <Routes>
@@ -31,6 +33,7 @@ function App() {
           <Route
             path={'settings'}
             element={
+              // Защита от входа на страницу в случае прямой ссылки
               <RequireAuth>
                 <Settings />
               </RequireAuth>

@@ -5,6 +5,7 @@ import { getUrl, URLS } from '../../utils/urls/urls';
 export const setUser = (email: string, password: string) => {
   return async (dispatch: Dispatch<UserAction>) => {
     let result: any;
+    // формируем объект для тела запроса
     const user = {
       user: {
         email: email,
@@ -16,6 +17,7 @@ export const setUser = (email: string, password: string) => {
       const response = await fetch(getUrl(URLS.LOGIN_URL), {
         method: 'POST',
         headers: {
+          // обязательно указываем что отправляем json
           'Content-Type': 'application/json;charset=utf-8',
         },
         body: JSON.stringify(user),

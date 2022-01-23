@@ -15,7 +15,7 @@ const Settings: FC = () => {
   return (
     <div>
       <Container>
-        Здесь должны быть настройки
+        <p>Здесь должны быть настройки профиля пользователя</p>
         <button style={{ padding: 10 }} onClick={clickHandler}>
           Разлогиниться
         </button>
