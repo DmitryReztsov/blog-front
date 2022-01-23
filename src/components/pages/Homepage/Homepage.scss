@@ -1,0 +1,39 @@
+.Homepage-banner {
+  background-color: #5cb85c;
+  text-align: center;
+  padding: 1.75rem;
+  color: white;
+}
+
+.Homepage-body {
+  margin: 2rem;
+}
+
+.Homepage-banner__title {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.Homepage-banner__text {
+  font-size: 1.5rem;
+  margin: 1rem;
+  font-weight: 300;
+}
+
+.Homepage-banner__text_italic {
+  font-style: italic;
+}
+
+.Homepage-nav {
+  padding: 10px 10px;
+}
+
+.Homepage-nav__link {
+  padding: 10px 10px;
+  color: #888686;
+}
+
+.Homepage-nav__link-active {
+  border-bottom: 2px solid #5cb85c;
+  color: #5cb85c;
+}
