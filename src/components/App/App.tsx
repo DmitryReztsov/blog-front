@@ -25,7 +25,14 @@ function App() {
               </RequireAuth>
             }
           />
-          <Route path={'editor'} element={<Editor />} />
+          <Route
+            path={'editor'}
+            element={
+              <RequireAuth>
+                <Editor />
+              </RequireAuth>
+            }
+          />
           <Route path={'profile/:username'} element={<Profile />} />
           <Route path={'login'} element={<Login />} />
           <Route path={'register'} element={<Register />} />
