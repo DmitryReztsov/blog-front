@@ -40,7 +40,7 @@ const Login: FC = () => {
   };
 
   const getClassname = (disabled: boolean): string => {
-    return disabled ? 'submit submit_disabled' : 'submit';
+    return disabled ? 'Login-form__submit submit submit_disabled' : 'Login-form__submit submit';
   };
 
   // Убираем ошибки, если перешли с регистрации
@@ -81,9 +81,9 @@ const Login: FC = () => {
               })}
             </ul>
           ) : null}
-          <form className={'form'} onSubmit={submitHandler}>
+          <form className={'Login-form form'} onSubmit={submitHandler}>
             <input
-              className={'input'}
+              className={'Login-form__input input'}
               name={'email'}
               type="email"
               placeholder={'Email'}
@@ -91,7 +91,7 @@ const Login: FC = () => {
               onChange={emailChangeHandler}
             />
             <input
-              className={'input'}
+              className={'Login-form__input input'}
               name={'password'}
               type="password"
               placeholder={'Password'}

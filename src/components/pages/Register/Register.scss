@@ -1,4 +1,4 @@
-@import '/src/sass/components/components.scss';
+
 
 .Register {
   &-body {
@@ -15,9 +15,9 @@
     display: block;
     color: #5cb85c;
   }
-}
-
-.register__error {
-  color: red;
-  font-weight: 700;
+  &-form {
+    width: 40%;
+    &__input {
+    }
+  }
 }

@@ -1,4 +1,4 @@
-@import '/src/sass/components/components.scss';
+
 
 .Login {
   &-body {
@@ -15,10 +15,11 @@
     display: block;
     color: #5cb85c;
   }
+  &-form {
+    width: 40%;
+    &__input {
+    }
+  }
 }
 
-.login__error {
-  color: red;
-  font-weight: 700;
-}
 

@@ -1,2 +1,14 @@
-@import '/src/sass/components/components.scss';
 
+.Editor {
+  &-body {
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+
+  }
+  &-form {
+    width: 80%;
+    &__input,&__textarea {
+    }
+  }
+}

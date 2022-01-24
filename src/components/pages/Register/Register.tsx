@@ -35,7 +35,9 @@ const Register: FC = () => {
   };
 
   const getClassname = (disabled: boolean): string => {
-    return disabled ? 'submit submit_disabled' : 'submit';
+    return disabled
+      ? 'Register-form__submit submit submit_disabled'
+      : 'Register-form__submit submit';
   };
 
   // Убираем ошибки, если неправильно ввели логин
@@ -76,9 +78,9 @@ const Register: FC = () => {
               })}
             </ul>
           ) : null}
-          <form className={'form'} onSubmit={submitHandler}>
+          <form className={'Register-form form'} onSubmit={submitHandler}>
             <input
-              className={'input'}
+              className={'Register-form__input input'}
               name={'username'}
               type="text"
               placeholder={'Username'}
@@ -86,7 +88,7 @@ const Register: FC = () => {
               onChange={usernameChangeHandler}
             />
             <input
-              className={'input'}
+              className={'Register-form__input input'}
               name={'email'}
               type="email"
               placeholder={'Email'}
@@ -94,7 +96,7 @@ const Register: FC = () => {
               onChange={emailChangeHandler}
             />
             <input
-              className={'input'}
+              className={'Register-form__input input'}
               name={'password'}
               type="password"
               placeholder={'Password'}
