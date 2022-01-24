@@ -124,6 +124,7 @@ export const clearUser = () => {
 function parseError(error: any): string[] {
   const objError = error['errors'];
   const result: string[] = [];
+
   // почему-то сервер возвращает ошибки в странном формате, иногда это массив, иногда просто строка,
   // поэтому делаем ветвление
   for (const key in objError) {
