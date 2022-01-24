@@ -3,8 +3,12 @@ import Container from '../../Container/Container';
 
 const Editor: FC = () => {
   return (
-    <div>
-      <Container>Здесь должен быть создание нового поста</Container>
+    <div className={'Editor'}>
+      <Container>
+        <div className={'Editor-body'}>
+          <form className={'Editor-form form'}></form>
+        </div>
+      </Container>
     </div>
   );
 };

@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import Container from '../../Container/Container';
 import { Link, useNavigate } from 'react-router-dom';
-import './Register.css';
+import './Register.scss';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../store/selectors';
-import { registerUser } from '../../../store/user/actions';
+import { clearUser, registerUser } from '../../../store/user/actions';
 
 const Register: FC = () => {
   const dispatch = useDispatch();
@@ -35,8 +35,13 @@ const Register: FC = () => {
   };
 
   const getClassname = (disabled: boolean): string => {
-    return disabled ? 'register__submit register__submit_disabled' : 'register__submit';
+    return disabled ? 'submit submit_disabled' : 'submit';
   };
+
+  // Убираем ошибки, если неправильно ввели логин
+  useEffect(() => {
+    dispatch(clearUser());
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -53,27 +58,27 @@ const Register: FC = () => {
   }, [username, email, password]);
 
   return (
-    <div className={'register'}>
+    <div className={'Register'}>
       <Container>
-        <div className={'register__body'}>
-          <h2 className={'register__header'}>Sign up</h2>
-          <Link className={'register__login-link'} to={'/login'}>
+        <div className={'Register-body'}>
+          <h2 className={'Register-header'}>Sign up</h2>
+          <Link className={'Register-login-link'} to={'/login'}>
             Have an account?
           </Link>
           {error ? (
             <ul>
               {error.text.map((text) => {
                 return (
-                  <li key={Math.random()} className={'register__error'}>
+                  <li key={Math.random()} className={'error'}>
                     {text}
                   </li>
                 );
               })}
             </ul>
           ) : null}
-          <form className={'register__form'} onSubmit={submitHandler}>
+          <form className={'form'} onSubmit={submitHandler}>
             <input
-              className={'register__input'}
+              className={'input'}
               name={'username'}
               type="text"
               placeholder={'Username'}
@@ -81,7 +86,7 @@ const Register: FC = () => {
               onChange={usernameChangeHandler}
             />
             <input
-              className={'register__input'}
+              className={'input'}
               name={'email'}
               type="email"
               placeholder={'Email'}
@@ -89,7 +94,7 @@ const Register: FC = () => {
               onChange={emailChangeHandler}
             />
             <input
-              className={'register__input'}
+              className={'input'}
               name={'password'}
               type="password"
               placeholder={'Password'}

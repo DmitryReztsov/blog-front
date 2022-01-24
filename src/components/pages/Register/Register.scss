@@ -1,0 +1,23 @@
+@import '/src/sass/components/components.scss';
+
+.Register {
+  &-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 1rem;
+  }
+  &-header {
+    font-size: 3rem;
+    font-weight: 400;
+  }
+  &-login-link {
+    display: block;
+    color: #5cb85c;
+  }
+}
+
+.register__error {
+  color: red;
+  font-weight: 700;
+}

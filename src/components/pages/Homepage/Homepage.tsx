@@ -27,7 +27,7 @@ const Homepage: FC = () => {
             <NavLink
               className={
                 active === 'user'
-                  ? 'Homepage-nav__link Homepage-nav__link-active'
+                  ? 'Homepage-nav__link Homepage-nav__link_active'
                   : 'Homepage-nav__link'
               }
               to={'/'}
@@ -38,7 +38,7 @@ const Homepage: FC = () => {
             <NavLink
               className={
                 active === 'global'
-                  ? 'Homepage-nav__link Homepage-nav__link-active'
+                  ? 'Homepage-nav__link Homepage-nav__link_active'
                   : 'Homepage-nav__link'
               }
               to={'/'}

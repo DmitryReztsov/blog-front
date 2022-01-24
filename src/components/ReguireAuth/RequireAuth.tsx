@@ -10,8 +10,8 @@ const RequireAuth: FC<IRequireAuthProps> = ({ children }) => {
   const location = useLocation();
   const token = getToken();
 
+  // Отправляем пользователя на страницу логина если он не залогинен
   if (!token) {
-    // Отправляем пользователя на страницу логина если он не залогинен
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

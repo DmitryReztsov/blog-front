@@ -1,11 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import Container from '../../Container/Container';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './Login.css';
+import './Login.scss';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../../store/user/actions';
+import { clearUser, setUser } from '../../../store/user/actions';
 import { useTypedSelector } from '../../../store/selectors';
-import { Type } from 'typescript';
 
 interface CustomizedState {
   from: string;
@@ -29,7 +28,6 @@ const Login: FC = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
     dispatch(setUser(email, password));
   };
 
@@ -42,8 +40,13 @@ const Login: FC = () => {
   };
 
   const getClassname = (disabled: boolean): string => {
-    return disabled ? 'login__submit login__submit_disabled' : 'login__submit';
+    return disabled ? 'submit submit_disabled' : 'submit';
   };
+
+  // Убираем ошибки, если перешли с регистрации
+  useEffect(() => {
+    dispatch(clearUser());
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -60,27 +63,27 @@ const Login: FC = () => {
   }, [email, password]);
 
   return (
-    <div className={'login'}>
+    <div className={'Login'}>
       <Container>
-        <div className={'login__body'}>
-          <h2 className={'login__header'}>Sign in</h2>
-          <Link className={'login__register-link'} to={'/register'}>
+        <div className={'Login-body'}>
+          <h2 className={'Login-header'}>Sign in</h2>
+          <Link className={'Login-register-link'} to={'/register'}>
             Need an account?
           </Link>
           {error ? (
             <ul>
               {error.text.map((text) => {
                 return (
-                  <li key={Math.random()} className={'login__error'}>
+                  <li key={Math.random()} className={'error'}>
                     {text}
                   </li>
                 );
               })}
             </ul>
           ) : null}
-          <form className={'login__form'} onSubmit={submitHandler}>
+          <form className={'form'} onSubmit={submitHandler}>
             <input
-              className={'login__input'}
+              className={'input'}
               name={'email'}
               type="email"
               placeholder={'Email'}
@@ -88,7 +91,7 @@ const Login: FC = () => {
               onChange={emailChangeHandler}
             />
             <input
-              className={'login__input'}
+              className={'input'}
               name={'password'}
               type="password"
               placeholder={'Password'}
