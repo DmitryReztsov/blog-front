@@ -22,9 +22,10 @@ const Login: FC = () => {
 
   const { user, error } = useTypedSelector((state) => state.user);
 
+  // управление формой
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [disabled, setDisabled] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState<boolean>(false);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
