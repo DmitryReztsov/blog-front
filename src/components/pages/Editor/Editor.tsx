@@ -1,16 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
+import { createArticle } from '../../../store/article/actions';
 import Container from '../../Container/Container';
 import './Editor.scss';
+import { useDispatch } from 'react-redux';
 
 const Editor: FC = () => {
+  const dispatch = useDispatch();
+
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [text, setText] = useState<string>('');
-  const [tags, setTags] = useState<string>('');
+  const [tag, setTag] = useState<string>('');
+  const [tags, setTags] = useState<string[]>([]);
   const [disabled, setDisabled] = useState<boolean>(false);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    dispatch(createArticle(title, description, text, tags));
   };
 
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -25,12 +31,29 @@ const Editor: FC = () => {
     setText(e.currentTarget.value);
   };
 
-  const tagsChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setTags(e.currentTarget.value);
+  const tagChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setTag(e.currentTarget.value);
+  };
+
+  const tagsKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.code === 'Enter') {
+      setTags((state) => {
+        if (!state.includes(tag)) {
+          state.push(tag);
+        }
+        return state;
+      });
+      setTag('');
+    }
   };
 
   const getClassname = (disabled: boolean): string => {
     return disabled ? 'Editor-form__submit submit submit_disabled' : 'Editor-form__submit submit';
+  };
+
+  const deleteTag = (wrongTag: string) => {
+    const filteredTags = tags.filter((tag) => tag !== wrongTag);
+    setTags(filteredTags);
   };
 
   useEffect(() => {
@@ -68,15 +91,28 @@ const Editor: FC = () => {
               placeholder={'Write your article (in markdown)'}
               value={text}
               onChange={textChangeHandler}
-            ></textarea>
+            />
             <input
               className={'Editor-form__input input'}
               name={'tags'}
               type="text"
+              value={tag}
               placeholder={'Enter tags'}
-              value={tags}
-              onChange={tagsChangeHandler}
+              onChange={tagChangeHandler}
+              onKeyDown={tagsKeyHandler}
             />
+            <ul className={'Editor-form__taglist taglist'}>
+              {tags.map((tag) => {
+                return (
+                  <li key={tag} className={'taglist__elem'}>
+                    <button className={'taglist__button'} onMouseDown={() => deleteTag(tag)}>
+                      x
+                    </button>
+                    <span className={'taglist__name'}>{tag}</span>
+                  </li>
+                );
+              })}
+            </ul>
             <button className={getClassname(disabled)} type={'submit'} disabled={disabled}>
               Publish Article
             </button>

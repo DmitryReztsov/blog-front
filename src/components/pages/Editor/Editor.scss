@@ -1,14 +1,16 @@
-
 .Editor {
   &-body {
     padding: 4rem;
     display: flex;
     flex-direction: column;
-
   }
   &-form {
     width: 80%;
-    &__input,&__textarea {
+    &__input,
+    &__textarea {
+    }
+    &__taglist {
+      align-self: flex-start;
     }
   }
 }
