@@ -1,40 +1,38 @@
-.header {
-  background-color: #f7f7f7;
-}
-.header__body {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2rem;
-}
-
-.logo {
-  color: #5cb85c;
-  font-weight: 700;
-  font-size: 1.5rem;
-}
-
-.nav {
-  display: flex;
-  column-gap: 10px;
-}
-
 @import '../../sass/main';
 
 .Header {
-  background: #f7f7f7;
+  @include block-format(_, 100%, 56px, 0, 8px 16px, $white);
+  @include flex(center);
 
-  &-body {
-    @include flex(space-between, center);
-    padding: 2rem;
+  &-content {
+    @include block-format(_, 100%, 100%);
+    @include flex(space-between);
   }
 
   &-logo {
-    @include text-format(1.5rem, 700, $source-sans, #5cb85c);
+    @include text-format(1.5rem, 700, $titillium-sans, $green, left);
+    text-decoration: none;
   }
 
-  &-nav {
-    display: flex;
-    column-gap: 10px;
+  &-navbar {
+    @include block-format(_, _, 100%);
+    @include flex();
+
+    &__link {
+      @include header-navbar-link;
+      &:hover {
+        color: $black;
+      }
+
+      &-active {
+        @include header-navbar-link;
+        color: $black;
+      }
+
+      &_img {
+        @include block-format(_, 26px, 26px, 0 5px 0 0);
+        border-radius: 50%;
+      }
+    }
   }
 }

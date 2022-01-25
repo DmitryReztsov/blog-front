@@ -7,7 +7,6 @@ import Editor from '../pages/Editor/Editor';
 import Profile from '../pages/Profile/Profile';
 import Register from '../pages/Register/Register';
 import Login from '../pages/Login/Login';
-import './App.css';
 import NotFound from '../pages/NotFound/NotFound';
 import RequireAuth from '../ReguireAuth/RequireAuth';
 import { useDispatch } from 'react-redux';
