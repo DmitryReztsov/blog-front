@@ -1,23 +1,28 @@
 import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
-import './Header.css';
-import Container from '../Container/Container';
 import { useTypedSelector } from '../../store/selectors';
 import { URLS } from '../../utils/urls/urls';
+import Container from '../Container/Container';
+
+import './Header.scss';
 
 const Header: FC = () => {
   const { user } = useTypedSelector((state) => state.user);
   return (
-    <header className="header">
+    <header className="Header">
       <Container>
-        <div className="header__body">
-          <NavLink to={'/'} className={'header__logo'}>
+        <div className="Header-content">
+          <NavLink to={'/'} className="Header-logo">
             conduit
           </NavLink>
-          <nav className="header__nav">
+
+          {/* Navbar start */}
+          <nav className="Header-navbar">
             <NavLink
               to={'/'}
-              className={({ isActive }) => (isActive ? 'active-link' : 'header__link')}
+              className={({ isActive }) =>
+                isActive ? 'Header-navbar__link-active' : 'Header-navbar__link'
+              }
             >
               Home
             </NavLink>
@@ -25,25 +30,32 @@ const Header: FC = () => {
               <>
                 <NavLink
                   to={'/editor'}
-                  className={({ isActive }) => (isActive ? 'active-link' : 'header__link')}
+                  className={({ isActive }) =>
+                    isActive ? 'Header-navbar__link-active' : 'Header-navbar__link'
+                  }
                 >
-                  New article
+                  <i className="ion-compose">&nbsp;New Article</i>
                 </NavLink>
                 <NavLink
                   to={'/settings'}
-                  className={({ isActive }) => (isActive ? 'active-link' : 'header__link')}
+                  className={({ isActive }) =>
+                    isActive ? 'Header-navbar__link-active' : 'Header-navbar__link'
+                  }
                 >
-                  Settings
+                  <i className="ion-gear-a start">&nbsp;Settings</i>
                 </NavLink>
-                <img
-                  src={user.image || URLS.DEFAULT_LOGO}
-                  alt="user-image"
-                  className={'user-image header_user-image'}
-                />
+
                 <NavLink
                   to={`/profile/${user.username}`}
-                  className={({ isActive }) => (isActive ? 'active-link' : 'header__link')}
+                  className={({ isActive }) =>
+                    isActive ? 'Header-navbar__link-active' : 'Header-navbar__link'
+                  }
                 >
+                  <img
+                    src={user.image || URLS.DEFAULT_LOGO}
+                    alt="user-image"
+                    className="Header-navbar__link_img"
+                  />
                   {user.username}
                 </NavLink>
               </>
@@ -51,19 +63,24 @@ const Header: FC = () => {
               <>
                 <NavLink
                   to={'/login'}
-                  className={({ isActive }) => (isActive ? 'active-link' : 'header__link')}
+                  className={({ isActive }) =>
+                    isActive ? 'Header-navbar__link-active' : 'Header-navbar__link'
+                  }
                 >
                   Sign in
                 </NavLink>
                 <NavLink
                   to={'/register'}
-                  className={({ isActive }) => (isActive ? 'active-link' : 'header__link')}
+                  className={({ isActive }) =>
+                    isActive ? 'Header-navbar__link-active' : 'Header-navbar__link'
+                  }
                 >
                   Sign up
                 </NavLink>
               </>
             )}
           </nav>
+          {/* Navbar end */}
         </div>
       </Container>
     </header>

@@ -1,10 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 import Container from '../../Container/Container';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import './Login.scss';
+import './Login.css';
 import { useDispatch } from 'react-redux';
-import { clearUser, setUser } from '../../../store/user/actions';
+import { setUser } from '../../../store/user/actions';
 import { useTypedSelector } from '../../../store/selectors';
+import { Type } from 'typescript';
 
 interface CustomizedState {
   from: string;
@@ -21,13 +22,13 @@ const Login: FC = () => {
 
   const { user, error } = useTypedSelector((state) => state.user);
 
-  // управление формой
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
     dispatch(setUser(email, password));
   };
 
@@ -40,13 +41,8 @@ const Login: FC = () => {
   };
 
   const getClassname = (disabled: boolean): string => {
-    return disabled ? 'Login-form__submit submit submit_disabled' : 'Login-form__submit submit';
+    return disabled ? 'login__submit login__submit_disabled' : 'login__submit';
   };
-
-  // Убираем ошибки, если перешли с регистрации
-  useEffect(() => {
-    dispatch(clearUser());
-  }, []);
 
   useEffect(() => {
     if (user) {
@@ -63,27 +59,27 @@ const Login: FC = () => {
   }, [email, password]);
 
   return (
-    <div className={'Login'}>
+    <div className={'login'}>
       <Container>
-        <div className={'Login-body'}>
-          <h2 className={'Login-header'}>Sign in</h2>
-          <Link className={'Login-register-link'} to={'/register'}>
+        <div className={'login__body'}>
+          <h2 className={'login__header'}>Sign in</h2>
+          <Link className={'login__register-link'} to={'/register'}>
             Need an account?
           </Link>
           {error ? (
             <ul>
               {error.text.map((text) => {
                 return (
-                  <li key={Math.random()} className={'error'}>
+                  <li key={Math.random()} className={'login__error'}>
                     {text}
                   </li>
                 );
               })}
             </ul>
           ) : null}
-          <form className={'Login-form form'} onSubmit={submitHandler}>
+          <form className={'login__form'} onSubmit={submitHandler}>
             <input
-              className={'Login-form__input input'}
+              className={'login__input'}
               name={'email'}
               type="email"
               placeholder={'Email'}
@@ -91,7 +87,7 @@ const Login: FC = () => {
               onChange={emailChangeHandler}
             />
             <input
-              className={'Login-form__input input'}
+              className={'login__input'}
               name={'password'}
               type="password"
               placeholder={'Password'}

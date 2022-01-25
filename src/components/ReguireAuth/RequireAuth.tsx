@@ -1,17 +1,18 @@
 import React, { FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { getToken } from '../../utils/common/common';
+import { useTypedSelector } from '../../store/selectors';
 
 interface IRequireAuthProps {
   children: JSX.Element;
 }
 
 const RequireAuth: FC<IRequireAuthProps> = ({ children }) => {
-  const location = useLocation();
-  const token = getToken();
+  const { user } = useTypedSelector((state) => state.user);
 
-  // Отправляем пользователя на страницу логина если он не залогинен
-  if (!token) {
+  const location = useLocation();
+
+  if (!user) {
+    // Отправляем пользователя на страницу логина если он не залогинен
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
