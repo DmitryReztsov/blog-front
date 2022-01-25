@@ -1,7 +1,7 @@
 @import '../../sass/main';
 
 .Container {
-  @include block-format(_, 100%, 100%, 0, 0 15px);
+  @include block-format(_, 100%, 100%, 0 auto, 0 15px);
   max-width: 1140px;
 
   @media (max-width: $xl) {

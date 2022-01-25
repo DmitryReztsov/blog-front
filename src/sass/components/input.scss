@@ -1,11 +1,15 @@
 .input {
-  border: 1px solid gray;
-  padding: 1rem;
-  background-color: transparent;
-  font-size: 1rem;
-  border-radius: 4px;
+  @include text-format(1.25rem,400,$source-sans,$black,_,inherit);
+  padding: 0.75rem 1.5rem;
   width: 100%;
+  line-height: 1.25;
+  font-size: 1.25rem;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 0.3rem;
+  outline: none;
+  box-sizing: border-box;
+
   &:focus {
-    border: 2px solid cornflowerblue;
+    border-color: $light-blue;
   }
 }

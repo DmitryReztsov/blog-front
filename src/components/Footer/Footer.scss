@@ -12,6 +12,7 @@
   &-logo {
     @include text-format(16px, 700, $titillium-sans, $green);
     text-decoration: none;
+
     &:hover {
       cursor: pointer;
       text-decoration: underline;
@@ -25,6 +26,7 @@
 
     span {
       @include text-format(13px, 400, $source-sans, $green);
+
       &:hover {
         cursor: pointer;
         text-decoration: underline;

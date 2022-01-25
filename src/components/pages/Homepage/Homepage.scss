@@ -20,10 +20,10 @@
 
       &_link {
         @include homepage-navbar-link;
+
         &:hover {
           color: $black;
         }
-        
 
         &-active {
           @include homepage-navbar-link;
@@ -50,7 +50,7 @@
     }
 
     &__tagList {
-      @include block-format(_, 100%, calc(100% - 24px))
+      @include block-format(_, 100%, calc(100% - 24px));
     }
   }
 }
