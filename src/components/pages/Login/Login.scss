@@ -3,26 +3,33 @@
 .Login {
 
   &-body {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    @include flex(_,center,column);
+    padding: 1.5rem 0;
+    width: 540px;
+    margin: 0 auto;
   }
 
   &-header {
-    font-size: 3rem;
-    font-weight: 400;
+    @include text-format(2.5rem,500,$source-sans,$black,_,_);
+    line-height: 1.1;
+    margin: 0 0 0.5rem 0;
   }
 
   &-register-link {
+    @include text-format(1rem,400,$source-sans,$green);
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
     display: block;
-    color: #5cb85c;
+    text-decoration: none;
+  }
+
+  &-error {
+
   }
 
   &-form {
-    width: 40%;
+    &__button {
 
-    &__input {
     }
   }
 }

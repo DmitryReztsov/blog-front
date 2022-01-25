@@ -40,7 +40,9 @@ const Login: FC = () => {
   };
 
   const getClassname = (disabled: boolean): string => {
-    return disabled ? 'Login-form__submit submit submit_disabled' : 'Login-form__submit submit';
+    return disabled
+      ? 'Login-form__submit form__submit submit submit_disabled'
+      : 'Login-form__submit form__submit submit';
   };
 
   // Убираем ошибки, если перешли с регистрации
@@ -71,10 +73,10 @@ const Login: FC = () => {
             Need an account?
           </Link>
           {error ? (
-            <ul>
+            <ul className={'Login-error-list error-list'}>
               {error.text.map((text) => {
                 return (
-                  <li key={Math.random()} className={'error'}>
+                  <li key={Math.random()} className={'Login-error error'}>
                     {text}
                   </li>
                 );
@@ -83,7 +85,7 @@ const Login: FC = () => {
           ) : null}
           <form className={'Login-form form'} onSubmit={submitHandler}>
             <input
-              className={'Login-form__input input'}
+              className={'Login-form__input form__input input'}
               name={'email'}
               type="email"
               placeholder={'Email'}
@@ -91,7 +93,7 @@ const Login: FC = () => {
               onChange={emailChangeHandler}
             />
             <input
-              className={'Login-form__input input'}
+              className={'Login-form__input form__input input'}
               name={'password'}
               type="password"
               placeholder={'Password'}

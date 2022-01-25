@@ -1,10 +1,14 @@
 .submit {
-  background-color: #5cb85c;
-  padding: 1rem;
-  color: white;
-  align-self: end;
-  border-radius: 4px;
-  font-size: 1.2rem;
+  @include text-format(1.25rem,400,$source-sans,$white,center,_);
+  outline: none;
+  background-color: $green;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.3rem;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  border-color: $green;
+  border: 1px solid transparent;
 
   &_disabled {
     cursor: not-allowed;
