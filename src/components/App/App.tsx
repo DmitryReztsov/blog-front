@@ -12,6 +12,7 @@ import RequireAuth from '../ReguireAuth/RequireAuth';
 import { useDispatch } from 'react-redux';
 import { authUser } from '../../store/user/actions';
 import { getToken } from '../../utils/common/common';
+import './App.scss';
 
 function App() {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ function App() {
   }, []);
 
   return (
-    <div className={'app'}>
+    <div className={'App'}>
       <Routes>
         <Route path={'/'} element={<Layout />}>
           <Route index element={<Homepage />} />
