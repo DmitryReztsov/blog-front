@@ -6,16 +6,20 @@
     align-items: center;
     row-gap: 1rem;
   }
+
   &-header {
     font-size: 3rem;
     font-weight: 400;
   }
+
   &-register-link {
     display: block;
     color: #5cb85c;
   }
+
   &-form {
     width: 40%;
+
     &__input {
     }
   }

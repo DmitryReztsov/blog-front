@@ -63,7 +63,7 @@
 }
 
 @mixin homepage-navbar-link() {
-  @include block-format(_, _, 100%, 0 3px 0 0, .5em 1em);
+  @include block-format(_, _, 100%, 0 3px 0 0, 0.5em 1em);
   @include text-format(1rem, 400, $source-sans, $gray-dark);
   line-height: 1.5rem;
   text-decoration: none;
