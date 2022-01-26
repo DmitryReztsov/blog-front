@@ -48,7 +48,9 @@ const Editor: FC = () => {
   };
 
   const getClassname = (disabled: boolean): string => {
-    return disabled ? 'Editor-form__submit submit submit_disabled' : 'Editor-form__submit submit';
+    return disabled
+      ? 'Editor-form__submit form__submit submit submit_disabled'
+      : 'Editor-form__submit form__submit submit';
   };
 
   const deleteTag = (wrongTag: string) => {
@@ -70,7 +72,7 @@ const Editor: FC = () => {
         <div className={'Editor-body'}>
           <form className={'Editor-form form'} onSubmit={submitHandler}>
             <input
-              className={'Editor-form__input input'}
+              className={'Editor-form__input form__input input'}
               name={'title'}
               type="text"
               placeholder={'Article Title'}
@@ -78,7 +80,7 @@ const Editor: FC = () => {
               onChange={titleChangeHandler}
             />
             <input
-              className={'Editor-form__input input'}
+              className={'Editor-form__input form__input input input_small'}
               name={'description'}
               type="text"
               placeholder={"What's this article about?"}
@@ -86,14 +88,14 @@ const Editor: FC = () => {
               onChange={descriptionChangeHandler}
             />
             <textarea
-              className={'Editor-form__textarea textarea'}
+              className={'Editor-form__textarea form__textarea textarea textarea_small'}
               name={'text'}
               placeholder={'Write your article (in markdown)'}
               value={text}
               onChange={textChangeHandler}
             />
             <input
-              className={'Editor-form__input input'}
+              className={'Editor-form__input form__input input input_small'}
               name={'tags'}
               type="text"
               value={tag}
@@ -105,10 +107,10 @@ const Editor: FC = () => {
               {tags.map((tag) => {
                 return (
                   <li key={tag} className={'taglist__elem'}>
-                    <button className={'taglist__button'} onMouseDown={() => deleteTag(tag)}>
+                    <span className={'taglist__button'} onMouseDown={() => deleteTag(tag)}>
                       x
-                    </button>
-                    <span className={'taglist__name'}>{tag}</span>
+                    </span>
+                    {tag}
                   </li>
                 );
               })}
