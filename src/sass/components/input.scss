@@ -3,11 +3,15 @@
   padding: 0.75rem 1.5rem;
   width: 100%;
   line-height: 1.25;
-  font-size: 1.25rem;
   border: 1px solid rgba(0,0,0,.15);
   border-radius: 0.3rem;
   outline: none;
   box-sizing: border-box;
+  &_small {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.25rem;
+  }
 
   &:focus {
     border-color: $light-blue;
