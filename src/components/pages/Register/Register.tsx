@@ -36,8 +36,8 @@ const Register: FC = () => {
 
   const getClassname = (disabled: boolean): string => {
     return disabled
-      ? 'Register-form__submit submit submit_disabled'
-      : 'Register-form__submit submit';
+      ? 'Register-form__submit form__submit submit submit_disabled'
+      : 'Register-form__submit form__submit submit';
   };
 
   // Убираем ошибки, если неправильно ввели логин
@@ -68,10 +68,10 @@ const Register: FC = () => {
             Have an account?
           </Link>
           {error ? (
-            <ul>
+            <ul className={'Register-error-list error-list'}>
               {error.text.map((text) => {
                 return (
-                  <li key={Math.random()} className={'error'}>
+                  <li key={Math.random()} className={'Register-error error'}>
                     {text}
                   </li>
                 );
@@ -80,7 +80,7 @@ const Register: FC = () => {
           ) : null}
           <form className={'Register-form form'} onSubmit={submitHandler}>
             <input
-              className={'Register-form__input input'}
+              className={'Register-form__input form__input input'}
               name={'username'}
               type="text"
               placeholder={'Username'}
@@ -88,7 +88,7 @@ const Register: FC = () => {
               onChange={usernameChangeHandler}
             />
             <input
-              className={'Register-form__input input'}
+              className={'Register-form__input form__input input'}
               name={'email'}
               type="email"
               placeholder={'Email'}
@@ -96,7 +96,7 @@ const Register: FC = () => {
               onChange={emailChangeHandler}
             />
             <input
-              className={'Register-form__input input'}
+              className={'Register-form__input form__input input'}
               name={'password'}
               type="password"
               placeholder={'Password'}
