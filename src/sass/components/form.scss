@@ -8,6 +8,10 @@
   }
 
   &__submit {
-    float: right;
+    margin: auto 0 auto auto;
+  }
+
+  &__logout {
+    margin: auto auto auto 0;
   }
 }

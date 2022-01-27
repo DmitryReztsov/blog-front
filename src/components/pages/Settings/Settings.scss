@@ -19,5 +19,15 @@
     &__textarea {
       height: 220px;
     }
+    &__line {
+      width: 100%;
+      color: $black;
+      margin: 1rem 0;
+      line-height: 1.5;
+    }
+  }
+
+  &-logout {
+
   }
 }

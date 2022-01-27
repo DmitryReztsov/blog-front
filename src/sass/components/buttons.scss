@@ -9,6 +9,7 @@
   user-select: none;
   border-color: $green;
   border: 1px solid transparent;
+  display: block;
 
   &:hover {
     background-color: $green-darker;
@@ -18,4 +19,21 @@
     cursor: not-allowed;
     opacity: 0.65;
   }
+
+  &_small {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+  }
+
+  &_logout {
+    background-color: transparent;
+    color: $error;
+    border-color: $error;
+  }
+  &:hover {
+    background-color: $error;
+    color: $white;
+  }
 }
+

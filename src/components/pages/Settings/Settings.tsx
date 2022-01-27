@@ -4,16 +4,18 @@ import { useDispatch } from 'react-redux';
 import { clearUser } from '../../../store/user/actions';
 import { useNavigate } from 'react-router-dom';
 import './Settings.scss';
+import { useTypedSelector } from '../../../store/selectors';
 
 const Settings: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [url, setUrl] = useState<string>('');
-  const [username, setUsername] = useState<string>('');
-  const [bio, setBio] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const { user } = useTypedSelector((state) => state.user);
+  const [url, setUrl] = useState<string | undefined>(user?.image);
+  const [username, setUsername] = useState<string | undefined>(user?.username);
+  const [bio, setBio] = useState<string | undefined>(user?.bio);
+  const [email, setEmail] = useState<string | undefined>(user?.email);
+  const [password, setPassword] = useState<string | undefined>('');
   const [disabled, setDisabled] = useState<boolean>(false);
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -75,7 +77,6 @@ const Settings: FC = () => {
             />
             <input
               className={'Settings-form__input form__input input'}
-              name={'username'}
               type="text"
               placeholder={'Username'}
               value={username}
@@ -107,11 +108,15 @@ const Settings: FC = () => {
             <button className={getClassname(disabled)} type={'submit'} disabled={disabled}>
               Update Settings
             </button>
+            <hr className={'Settings-form__line'} />
+            <button
+              onClick={clickHandler}
+              className={'Settings-form__logout form__logout submit submit_small submit_logout'}
+            >
+              Or click here to logout.
+            </button>
           </form>
         </div>
-        <button style={{ padding: 10 }} onClick={clickHandler}>
-          Разлогиниться
-        </button>
       </Container>
     </div>
   );
