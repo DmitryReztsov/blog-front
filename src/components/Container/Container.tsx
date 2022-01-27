@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import './Container.css';
+import './Container.scss';
 
 interface IContainerProps {
   children: React.ReactNode[] | React.ReactNode;
 }
 
 const Container: FC<IContainerProps> = ({ children }) => {
-  return <div className={'container'}>{children}</div>;
+  return <div className="Container">{children}</div>;
 };
 
 export default Container;
