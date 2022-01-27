@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import Container from '../../Container/Container';
 import { useDispatch } from 'react-redux';
-import { clearUser } from '../../../store/user/actions';
+import { clearUser, updateUser } from '../../../store/user/actions';
 import { useNavigate } from 'react-router-dom';
 import './Settings.scss';
 import { useTypedSelector } from '../../../store/selectors';
@@ -11,7 +11,7 @@ const Settings: FC = () => {
   const navigate = useNavigate();
 
   const { user } = useTypedSelector((state) => state.user);
-  const [url, setUrl] = useState<string | undefined>(user?.image);
+  const [image, setImage] = useState<string | undefined>(user?.image);
   const [username, setUsername] = useState<string | undefined>(user?.username);
   const [bio, setBio] = useState<string | undefined>(user?.bio);
   const [email, setEmail] = useState<string | undefined>(user?.email);
@@ -20,10 +20,11 @@ const Settings: FC = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    dispatch(updateUser(image, username, bio, email, password));
   };
 
-  const urlChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setUrl(e.currentTarget.value);
+  const imageChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setImage(e.currentTarget.value);
   };
 
   const usernameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -69,11 +70,11 @@ const Settings: FC = () => {
           <form className={'Settings-form form'} onSubmit={submitHandler}>
             <input
               className={'Settings-form__input form__input input input_small'}
-              name={'url'}
+              name={'image'}
               type="text"
               placeholder={'URL of profile picture'}
-              value={url}
-              onChange={urlChangeHandler}
+              value={image}
+              onChange={imageChangeHandler}
             />
             <input
               className={'Settings-form__input form__input input'}
