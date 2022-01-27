@@ -1,10 +1,10 @@
 @import '/src/sass/main';
 
-.Register {
+.Settings {
   &-body {
     @include flex(_, center, column);
+    width: 920px;
     padding: 1.5rem 0;
-    width: 540px;
     margin: 0 auto;
   }
 
@@ -14,17 +14,20 @@
     margin: 0 0 0.5rem 0;
   }
 
-  &-login-link {
-    @include text-format(1rem, 400, $source-sans, $green);
-    line-height: 1.5;
-    margin: 0 0 1rem 0;
-    display: block;
-    text-decoration: none;
-  }
-
-  &-error {
-  }
-
   &-form {
+    width: 540px;
+    &__textarea {
+      height: 220px;
+    }
+    &__line {
+      width: 100%;
+      color: $black;
+      margin: 1rem 0;
+      line-height: 1.5;
+    }
+  }
+
+  &-logout {
+
   }
 }
