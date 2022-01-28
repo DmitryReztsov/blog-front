@@ -17,6 +17,7 @@ const Editor: FC = () => {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     dispatch(createArticle(title, description, text, tags));
+    console.log(tags);
   };
 
   const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,6 +38,7 @@ const Editor: FC = () => {
 
   const tagsKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.code === 'Enter') {
+      e.preventDefault();
       setTags((state) => {
         if (!state.includes(tag)) {
           state.push(tag);

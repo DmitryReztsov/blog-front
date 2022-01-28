@@ -21,7 +21,7 @@ function App() {
   useEffect(() => {
     const token = getToken();
     if (token) {
-      dispatch(authUser(token));
+      dispatch(authUser());
     }
   }, []);
 

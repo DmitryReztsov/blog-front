@@ -4,7 +4,7 @@ export enum URLS {
   REGISTER_URL = '/api/users',
   LOGIN_URL = '/api/users/login',
   AUTH_URL = '/api/user',
-  UPDATE_USER = '/api/user',
+  UPDATE_URL = '/api/user',
   CREATE_ARTICLE_URL = '/api/articles',
 }
 

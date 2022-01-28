@@ -31,7 +31,6 @@ export function userReducer(state: IUserState = initialState, action: UserAction
     case UserActionTypes.ERROR_USER: {
       return {
         ...state,
-        user: null,
         loading: false,
         error: {
           status: action.payload.status,

@@ -10,13 +10,12 @@ const Settings: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user } = useTypedSelector((state) => state.user);
-  const [image, setImage] = useState<string | undefined>(user?.image);
-  const [username, setUsername] = useState<string | undefined>(user?.username);
-  const [bio, setBio] = useState<string | undefined>(user?.bio);
-  const [email, setEmail] = useState<string | undefined>(user?.email);
-  const [password, setPassword] = useState<string | undefined>('');
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const { user, error } = useTypedSelector((state) => state.user);
+  const [image, setImage] = useState<string>(user?.image as string);
+  const [username, setUsername] = useState<string>(user?.username as string);
+  const [bio, setBio] = useState<string>(user?.bio as string);
+  const [email, setEmail] = useState<string>(user?.email as string);
+  const [password, setPassword] = useState<string>('');
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -43,30 +42,34 @@ const Settings: FC = () => {
     setPassword(e.currentTarget.value);
   };
 
-  const getClassname = (disabled: boolean): string => {
-    return disabled
-      ? 'Settings-form__submit form__submit submit submit_disabled'
-      : 'Settings-form__submit form__submit submit';
-  };
-
-  useEffect(() => {
-    if (username && email && password) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
-  }, [username, email, password]);
-
   const clickHandler = (): void => {
     dispatch(clearUser());
     navigate('/', { replace: true });
   };
+
+  // хитрая конструкция, чтобы избежать первичного рендера
+  useEffect(() => {
+    return () => {
+      navigate('/');
+    };
+  }, [user]);
 
   return (
     <div>
       <Container>
         <div className={'Settings-body'}>
           <h2 className={'Settings-header'}>Your Settings</h2>
+          {error ? (
+            <ul className={'Register-error-list error-list'}>
+              {error.text.map((text) => {
+                return (
+                  <li key={Math.random()} className={'Register-error error'}>
+                    {text}
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
           <form className={'Settings-form form'} onSubmit={submitHandler}>
             <input
               className={'Settings-form__input form__input input input_small'}
@@ -106,7 +109,7 @@ const Settings: FC = () => {
               value={password}
               onChange={passwordChangeHandler}
             />
-            <button className={getClassname(disabled)} type={'submit'} disabled={disabled}>
+            <button className={'Settings-form__submit form__submit submit'} type={'submit'}>
               Update Settings
             </button>
             <hr className={'Settings-form__line'} />
