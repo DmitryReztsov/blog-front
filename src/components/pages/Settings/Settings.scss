@@ -16,9 +16,11 @@
 
   &-form {
     width: 540px;
+
     &__textarea {
       height: 220px;
     }
+
     &__line {
       width: 100%;
       color: $black;
@@ -28,6 +30,5 @@
   }
 
   &-logout {
-
   }
 }

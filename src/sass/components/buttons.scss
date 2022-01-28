@@ -30,11 +30,10 @@
     background-color: transparent;
     color: $error;
     border-color: $error;
+
     &:hover {
       background-color: $error;
       color: $white;
     }
   }
-
 }
-

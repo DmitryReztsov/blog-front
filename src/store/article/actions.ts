@@ -11,8 +11,8 @@ export const createArticle = (title: string, description: string, text: string, 
       article: {
         title: title,
         description: description,
-        text: text,
-        tags: tags,
+        body: text,
+        tagList: tags,
       },
     };
     try {
