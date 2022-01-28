@@ -97,11 +97,11 @@ export const clearUser = () => {
 };
 
 export const updateUser = (
-  image: string | undefined,
-  username: string | undefined,
-  bio: string | undefined,
-  email: string | undefined,
-  password: string | undefined
+  image: string,
+  username: string,
+  bio: string,
+  email: string,
+  password: string
 ) => {
   return async (dispatch: Dispatch<UserAction>) => {
     let result: any;

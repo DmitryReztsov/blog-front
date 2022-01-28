@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import Container from '../../Container/Container';
 import { useDispatch } from 'react-redux';
 import { clearUser, updateUser } from '../../../store/user/actions';
@@ -11,11 +11,11 @@ const Settings: FC = () => {
   const navigate = useNavigate();
 
   const { user, error } = useTypedSelector((state) => state.user);
-  const [image, setImage] = useState<string | undefined>(user?.image);
-  const [username, setUsername] = useState<string | undefined>(user?.username);
-  const [bio, setBio] = useState<string | undefined>(user?.bio);
-  const [email, setEmail] = useState<string | undefined>(user?.email);
-  const [password, setPassword] = useState<string | undefined>('');
+  const [image, setImage] = useState<string>(user?.image as string);
+  const [username, setUsername] = useState<string>(user?.username as string);
+  const [bio, setBio] = useState<string>(user?.bio as string);
+  const [email, setEmail] = useState<string>(user?.email as string);
+  const [password, setPassword] = useState<string>('');
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
