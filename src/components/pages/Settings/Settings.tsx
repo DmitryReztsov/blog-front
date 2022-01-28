@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import Container from '../../Container/Container';
 import { useDispatch } from 'react-redux';
 import { clearUser, updateUser } from '../../../store/user/actions';

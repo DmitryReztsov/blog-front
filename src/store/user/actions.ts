@@ -15,16 +15,8 @@ export const setUser = (email: string, password: string) => {
     };
     try {
       dispatch({ type: UserActionTypes.LOADING_USER });
-      const response = await fetch(getUrl(URLS.LOGIN_URL), {
-        method: 'POST',
-        headers: {
-          // обязательно указываем что отправляем json
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(user),
-      });
 
-      result = await response.json();
+      result = await doRequest(user, 'POST', URLS.LOGIN_URL, false);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -56,15 +48,8 @@ export const registerUser = (username: string, email: string, password: string) 
     };
     try {
       dispatch({ type: UserActionTypes.LOADING_USER });
-      const response = await fetch(getUrl(URLS.REGISTER_URL), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-        },
-        body: JSON.stringify(user),
-      });
 
-      result = await response.json();
+      result = await doRequest(user, 'POST', URLS.REGISTER_URL, false);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -84,19 +69,11 @@ export const registerUser = (username: string, email: string, password: string) 
   };
 };
 
-export const authUser = (token: string) => {
+export const authUser = () => {
   return async (dispatch: Dispatch<UserAction>) => {
     let result: any;
     try {
-      const response = await fetch(getUrl(URLS.AUTH_URL), {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json;charset=utf-8',
-          Authorization: `Token ${token}`,
-        },
-      });
-
-      result = await response.json();
+      result = await doRequest('', 'GET', URLS.AUTH_URL, true);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -140,17 +117,8 @@ export const updateUser = (
     };
     try {
       dispatch({ type: UserActionTypes.LOADING_USER });
-      const response = await fetch(getUrl(URLS.UPDATE_USER), {
-        method: 'PUT',
-        headers: {
-          // обязательно указываем что отправляем json
-          'Content-Type': 'application/json;charset=utf-8',
-          Authorization: `Token ${getToken()}`,
-        },
-        body: JSON.stringify(user),
-      });
 
-      result = await response.json();
+      result = await doRequest(user, 'PUT', URLS.UPDATE_URL, true);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -169,3 +137,30 @@ export const updateUser = (
     }
   };
 };
+
+interface IOptions extends RequestInit {
+  method: string;
+  headers: { 'Content-Type': string; Authorization?: string };
+  body?: string;
+}
+
+async function doRequest<T>(data: T, method: string, url: string, auth: boolean) {
+  const options: IOptions = {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+    },
+  };
+
+  if (data) {
+    options.body = JSON.stringify(data);
+  }
+
+  if (auth) {
+    options.headers.Authorization = `Token ${getToken()}`;
+  }
+
+  const response = await fetch(getUrl(url), options);
+
+  return await response.json();
+}
