@@ -3,7 +3,7 @@
 .Settings {
   &-body {
     @include flex(_, center, column);
-    width: 920px;
+    width: 540px;
     padding: 1.5rem 0;
     margin: 0 auto;
   }
@@ -15,7 +15,6 @@
   }
 
   &-form {
-    width: 540px;
 
     &__textarea {
       height: 220px;
