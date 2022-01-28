@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { UserAction, UserActionTypes } from './types';
 import { getUrl, URLS } from '../../utils/urls/urls';
-import { getToken } from '../../utils/common/common';
+import { getToken, parseError } from '../../utils/common/common';
 
 export const setUser = (email: string, password: string) => {
   return async (dispatch: Dispatch<UserAction>) => {
@@ -49,9 +49,9 @@ export const registerUser = (username: string, email: string, password: string) 
     let result: any;
     const user = {
       user: {
-        username: username,
-        email: email,
-        password: password,
+        username,
+        email,
+        password,
       },
     };
     try {
@@ -153,7 +153,7 @@ export const updateUser = (
       result = await response.json();
 
       // если мы ввели неправильные данные...
-      if (result.status === 401) {
+      if (result.status === 422) {
         throw new Error();
       }
 
@@ -169,22 +169,3 @@ export const updateUser = (
     }
   };
 };
-
-// парсим тело ответа, если что-то пошло не так
-// пример тела: {"errors":{"email":["has already been taken"],"username":["has already been taken"]}}
-
-function parseError(error: any): string[] {
-  const objError = error['errors'];
-  const result: string[] = [];
-
-  // почему-то сервер возвращает ошибки в странном формате, иногда это массив, иногда просто строка,
-  // поэтому делаем ветвление
-  for (const key in objError) {
-    if (typeof objError[key] === 'object') {
-      result.push(key + ' ' + objError[key][0]);
-    } else {
-      result.push(key + ' ' + objError[key]);
-    }
-  }
-  return result;
-}
