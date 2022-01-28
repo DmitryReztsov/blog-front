@@ -47,6 +47,13 @@ const Settings: FC = () => {
     navigate('/', { replace: true });
   };
 
+  // хитрая конструкция, чтобы избежать первичного рендера
+  useEffect(() => {
+    return () => {
+      navigate('/');
+    };
+  }, [user]);
+
   return (
     <div>
       <Container>
