@@ -47,7 +47,6 @@ const Settings: FC = () => {
     navigate('/', { replace: true });
   };
 
-
   return (
     <div>
       <Container>
