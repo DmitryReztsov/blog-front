@@ -10,6 +10,7 @@
   border-color: $green;
   border: 1px solid transparent;
   display: block;
+  line-height: 1.25;
 
   &:hover {
     background-color: $green-darker;
@@ -24,6 +25,21 @@
     font-size: 1rem;
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
+  }
+
+  &_very-small {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.2rem;
+  }
+
+  &_settings {
+    background-color: transparent;
+    color: $gray-darker;
+    border-color: $gray-darker;
+    &:hover {
+      background-color: $gray-ccc;
+    }
   }
 
   &_logout {
