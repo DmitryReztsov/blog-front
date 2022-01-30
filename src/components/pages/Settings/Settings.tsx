@@ -17,9 +17,11 @@ const Settings: FC = () => {
   const [email, setEmail] = useState<string>(user?.email as string);
   const [password, setPassword] = useState<string>('');
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+  // делаем ее асинхронной чтобы можно было перенаправить пользователя
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(updateUser(image, username, bio, email, password));
+    await dispatch(updateUser(image, username, bio, email, password));
+    if (!error) navigate(`/profile/${user?.username}`);
   };
 
   const imageChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -46,13 +48,6 @@ const Settings: FC = () => {
     dispatch(clearUser());
     navigate('/', { replace: true });
   };
-
-  // хитрая конструкция, чтобы избежать первичного рендера
-  useEffect(() => {
-    return () => {
-      navigate('/');
-    };
-  }, [user]);
 
   return (
     <div>
