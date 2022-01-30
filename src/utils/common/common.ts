@@ -23,3 +23,30 @@ export function parseError(error: any): string[] {
   }
   return result;
 }
+
+export function setCookie(name: string, value: string, options?: { [key: string]: string }) {
+  options = {
+    path: '/',
+    ...options,
+  };
+
+  let updatedCookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+  for (const optionKey in options) {
+    if (options) {
+      updatedCookie += '; ' + optionKey;
+      const optionValue = options[optionKey];
+      if (optionValue) {
+        updatedCookie += '=' + optionValue;
+      }
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+export function deleteCookie() {
+  setCookie('jwtToken', '', {
+    'max-age': '-1',
+  });
+}

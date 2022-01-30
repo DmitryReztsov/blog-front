@@ -17,7 +17,7 @@ export const createArticle = (title: string, description: string, text: string, 
     };
     try {
       dispatch({ type: ArticleActionTypes.LOADING_ARTICLE });
-      const response = await fetch(getUrl(URLS.CREATE_ARTICLE_URL), {
+      const response = await fetch(getUrl(URLS.CREATE_ARTICLE), {
         method: 'POST',
         headers: {
           // обязательно указываем что отправляем json
