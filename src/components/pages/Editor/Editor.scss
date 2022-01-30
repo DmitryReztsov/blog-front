@@ -2,7 +2,7 @@
 
 .Editor {
   &-body {
-    @include flex(_, center, column);
+    @include flex(_,center,column);
     width: 920px;
     padding: 1.5rem 0;
     margin: 0 auto;
@@ -10,7 +10,6 @@
 
   &-form {
     width: 920px;
-
     &__input,
     &__textarea {
     }

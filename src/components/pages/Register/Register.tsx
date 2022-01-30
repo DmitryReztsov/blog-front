@@ -81,6 +81,7 @@ const Register: FC = () => {
           <form className={'Register-form form'} onSubmit={submitHandler}>
             <input
               className={'Register-form__input form__input input'}
+              name={'username'}
               type="text"
               placeholder={'Username'}
               value={username}

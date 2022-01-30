@@ -1,5 +1,4 @@
 import { IUserState, UserAction, UserActionTypes } from './types';
-import { URLS } from '../../utils/urls/urls';
 
 const initialState: IUserState = {
   user: null,
@@ -18,7 +17,7 @@ export function userReducer(state: IUserState = initialState, action: UserAction
           token: action.payload.token,
           username: action.payload.username,
           bio: action.payload.bio,
-          image: action.payload.image || URLS.DEFAULT_LOGO,
+          image: action.payload.image,
         },
       };
     }
@@ -31,6 +30,7 @@ export function userReducer(state: IUserState = initialState, action: UserAction
     case UserActionTypes.ERROR_USER: {
       return {
         ...state,
+        user: null,
         loading: false,
         error: {
           status: action.payload.status,
