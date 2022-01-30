@@ -11,13 +11,13 @@ export const createArticle = (title: string, description: string, text: string, 
       article: {
         title: title,
         description: description,
-        body: text,
-        tagList: tags,
+        text: text,
+        tags: tags,
       },
     };
     try {
       dispatch({ type: ArticleActionTypes.LOADING_ARTICLE });
-      const response = await fetch(getUrl(URLS.CREATE_ARTICLE), {
+      const response = await fetch(getUrl(URLS.CREATE_ARTICLE_URL), {
         method: 'POST',
         headers: {
           // обязательно указываем что отправляем json
