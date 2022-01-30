@@ -2,6 +2,7 @@ import { Dispatch } from 'redux';
 import { UserAction, UserActionTypes } from './types';
 import { getUrl, URLS } from '../../utils/urls/urls';
 import { deleteCookie, getToken, parseError, setCookie } from '../../utils/common/common';
+import { IOptions } from '../../utils/types/types';
 
 export const setUser = (email: string, password: string) => {
   return async (dispatch: Dispatch<UserAction>) => {
@@ -138,12 +139,6 @@ export const updateUser = (
     }
   };
 };
-
-interface IOptions extends RequestInit {
-  method: string;
-  headers: { 'Content-Type': string; Authorization?: string };
-  body?: string;
-}
 
 async function doRequest<T>(data: T, method: string, url: string, auth: boolean) {
   const options: IOptions = {

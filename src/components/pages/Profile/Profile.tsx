@@ -4,6 +4,8 @@ import { useTypedSelector } from '../../../store/selectors';
 import { getUrl, URLS } from '../../../utils/urls/urls';
 import { useNavigate, useParams } from 'react-router-dom';
 import './Profile.scss';
+import { getToken } from '../../../utils/common/common';
+import { IOptions } from '../../../utils/types/types';
 
 interface IProfile {
   username: string;
@@ -21,16 +23,42 @@ const Profile: FC = () => {
   const clickHandler = () => {
     if (username === user?.username) {
       navigate('/settings');
+    } else if (profile?.following === false) {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Token ${getToken()}` as string,
+        },
+      };
+      const url = getUrl(URLS.GET_USER) + `/${username}` + '/follow';
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((data) => setProfile(data.profile));
+    } else {
+      const options = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Token ${getToken()}` as string,
+        },
+      };
+      const url = getUrl(URLS.GET_USER) + `/${username}` + '/follow';
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((data) => setProfile(data.profile));
     }
   };
 
   useEffect(() => {
-    const options = {
+    const token = getToken();
+    const options: IOptions = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
     };
+    if (token) options.headers.Authorization = `Token ${token}`;
     fetch(getUrl(URLS.GET_USER) + `/${username}`, options)
       .then((response) => response.json())
       .then((data) => setProfile(data.profile));
@@ -54,7 +82,11 @@ const Profile: FC = () => {
               className={'Profile-header__button submit submit_very-small submit_settings'}
               onClick={() => clickHandler()}
             >
-              {username === user?.username ? 'Edit profile settings' : `Follow ${username}`}
+              {username === user?.username
+                ? 'Edit profile settings'
+                : profile?.following
+                ? `Unfollow ${username}`
+                : `Follow ${username}`}
             </button>
           </div>
         </Container>
