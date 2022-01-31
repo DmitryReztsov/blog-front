@@ -1,45 +1,50 @@
-import { IUser } from '../user/types';
-
 export interface IArticle {
-  slug: string;
-  title: string;
-  description: string;
-  body: string;
-  tagList: string[];
-  createdAt: string;
-  updatedAt: string;
-  favorited: boolean;
-  favoritesCount: number;
-  author: IUser;
-}
-
-export interface IArticleError {
-  status: number;
-  text: string[];
+  slug?: String;
+  title: String;
+  description: String;
+  body: String;
+  author?: String;
+  tagList: string[] | [];
+  favoritesCount?: Number;
+  comments?: string[] | [];
 }
 
 export interface IArticleState {
-  articles: IArticle[] | [];
+  articles: IArticle[] | undefined;
+  error: Error | undefined;
   loading: boolean;
-  error: IArticleError | null;
 }
+
+export type ArticleAction = {
+  type: string;
+  payload?: any;
+};
 
 export enum ArticleActionTypes {
-  CREATE_ARTICLE = 'CREATE_ARTICLE',
-  LOADING_ARTICLE = 'LOADING_ARTICLE',
-  ERROR_ARTICLE = 'ERROR_ARTICLE',
+  ADD_ARTICLE = 'ADD_ARTICLE',
+  REMOVE_ARTICLE = 'REMOVE_ARTICLE',
+  LOAD_ARTICLE = 'LOAD_ARTICLE',
+  GET_ARTICLE = 'GET_ARTICLE',
+  GET_USER_ARTICLES = 'GET_USER_ARTICLES',
+  GET_GLOBAL_ARTICLES = 'GET_GLOBAL_ARTICLES',
 }
 
-export type CreateArticleAction = {
-  type: ArticleActionTypes.CREATE_ARTICLE;
-};
-export type LoadingUserAction = {
-  type: ArticleActionTypes.LOADING_ARTICLE;
-};
+export enum URLS {
+  ADD_ARTICLE_URL = '/api/articles',
+  REMOVE_ARTICLE_URL = '/api/articles/',
+  GET_ARTICLE_URL = '/api/articles?title=',
+  GET_USER_ARTICLES_URL = '/api/articles?author=',
+  GET_GLOBAL_ARTICLES_URL = '/api/articles',
+}
 
-export type ErrorUserAction = {
-  type: ArticleActionTypes.ERROR_ARTICLE;
-  payload: IArticleError;
-};
+export enum ARTICLE_LIST_MODE {
+  USER_MODE = 'USER_MODE',
+  GLOBAL_MODE = 'GLOBAL_MODE',
+  TAG_MODE = 'TAG_MODE',
+}
 
-export type ArticleAction = CreateArticleAction | LoadingUserAction | ErrorUserAction;
+export type fetchOptions = {
+  method: string;
+  headers: { 'Content-Type': string; Authorization?: string };
+  body?: any;
+};

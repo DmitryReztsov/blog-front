@@ -1,9 +1,9 @@
-@import '../../sass/main';
+@import '../../../sass/main';
 
 .ArticleList {
   @include block-format(_, 100%, _);
 
-  &-empty__text {
+  &-text {
     padding-left: 212px;
     @include text-format(1rem, 400, $source-sans, $black, left);
     line-height: 1.5rem;
