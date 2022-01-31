@@ -4,7 +4,7 @@
 }
 
 .error {
-  @include text-format(1rem, 700, $source-sans, $error, left, _);
+  @include text-format(1rem,700,$source-sans,$error,left,_);
   list-style: disc;
   margin-bottom: 1rem;
 }

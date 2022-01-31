@@ -1,7 +1,8 @@
 .taglist {
+
   &__elem {
     display: inline-block;
-    @include text-format(0.8rem, 400, $source-sans, $white, center, inherit);
+    @include text-format(0.8rem,400,$source-sans,$white,center,inherit);
     padding: 0.1rem 0.6rem;
     background-color: $gray-very-dark;
     border-radius: 10rem;
@@ -15,3 +16,4 @@
     margin-right: 5px;
   }
 }
+
