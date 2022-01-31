@@ -12,6 +12,7 @@ import RequireAuth from '../ReguireAuth/RequireAuth';
 import { useDispatch } from 'react-redux';
 import { authUser } from '../../store/user/actions';
 import { getToken } from '../../utils/common/common';
+import Article from '../pages/Article/Article';
 import './App.scss';
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
           <Route path={'profile/:username'} element={<Profile />} />
           <Route path={'login'} element={<Login />} />
           <Route path={'register'} element={<Register />} />
+          <Route path={'article/:title'} element={<Article />} />
           <Route path={'*'} element={<NotFound />} />
         </Route>
       </Routes>

@@ -1,123 +1,196 @@
-import React, { FC, useEffect, useState } from 'react';
-import { createArticle } from '../../../store/article/actions';
-import Container from '../../Container/Container';
-import './Editor.scss';
+import React, { FC, useEffect, useRef, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+
 import { useDispatch } from 'react-redux';
+import { addArticle, getArticle, loadArticle } from '../../../store/article/actions';
+import { useTypedSelector } from '../../../store/selectors';
+
+import Container from '../../Container/Container';
+import FormTag from '../../Tags/FormTag/FormTag';
+
+import './Editor.scss';
 
 const Editor: FC = () => {
-  const dispatch = useDispatch();
-
+  // form fields
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [text, setText] = useState<string>('');
+  const [body, setBody] = useState<string>('');
+  const [tagList, setTagList] = useState<string[]>([]);
+
+  // error form
+  const [errorForm, setErrorForm] = useState<string | null>(null);
+  const [checkUnique, setCheckUnique] = useState<boolean>(false);
+  const [creatingArticle, setCreatingArticle] = useState<boolean>(false);
+
+  // tag form
   const [tag, setTag] = useState<string>('');
-  const [tags, setTags] = useState<string[]>([]);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const tagInput = useRef<HTMLInputElement>(null);
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+  const dispatch = useDispatch();
+  const { articles, loading, error } = useTypedSelector((state) => state.article);
+
+  const navigate = useNavigate();
+
+  // send form fields to server and add new Article
+  const saveArticle = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
-    dispatch(createArticle(title, description, text, tags));
+    submitForm();
   };
 
-  const titleChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setTitle(e.currentTarget.value);
-  };
-
-  const descriptionChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setDescription(e.currentTarget.value);
-  };
-
-  const textChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setText(e.currentTarget.value);
-  };
-
-  const tagChangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setTag(e.currentTarget.value);
-  };
-
-  const tagsKeyHandler = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-    if (e.code === 'Enter') {
-      setTags((state) => {
-        if (!state.includes(tag)) {
-          state.push(tag);
-        }
-        return state;
-      });
-      setTag('');
+  // check form fields
+  const submitForm = () => {
+    if (!title.trim()) {
+      setErrorForm("title can't be blank");
+      return false;
     }
+    if (!description.trim()) {
+      setErrorForm("description can't be blank");
+      return false;
+    }
+    if (!body.trim()) {
+      setErrorForm("body can't be blank");
+      return false;
+    }
+
+    checkTitleUnique(title);
   };
 
-  const getClassname = (disabled: boolean): string => {
-    return disabled
-      ? 'Editor-form__submit form__submit submit submit_disabled'
-      : 'Editor-form__submit form__submit submit';
+  // check title unique
+  const checkTitleUnique = async (title: string) => {
+    setCheckUnique(true);
+    dispatch(loadArticle());
+    dispatch(getArticle(title));
   };
 
-  const deleteTag = (wrongTag: string) => {
-    const filteredTags = tags.filter((tag) => tag !== wrongTag);
-    setTags(filteredTags);
-  };
-
+  // check unique title by loading articles
   useEffect(() => {
-    if (title && description && text) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
+    if (articles && !loading && checkUnique) {
+      let unique = true;
+
+      articles.map((el: any) => {
+        if (el.title.toLowerCase() === title.trim().toLowerCase()) {
+          unique = false;
+        }
+      });
+      if (!unique) {
+        setCheckUnique(false);
+        setErrorForm('title must be unique');
+      } else {
+        setCheckUnique(false);
+        setErrorForm(null);
+        dispatch(addArticle({ title, description, body, tagList }));
+        setCreatingArticle(true);
+      }
     }
-  }, [title, description, text]);
+  }, [checkUnique, loading]);
+
+  // redirect to new article
+  useEffect(() => {
+    if (creatingArticle) {
+      if (!loading && !error) {
+        console.log('create & redirect');
+        setCreatingArticle(false);
+        setTimeout(() => navigate(`article/${title}`), 1500);
+      }
+    }
+  }, [creatingArticle, loading]);
+
+  // Save form fileds
+  const changeFormHandler = (event: React.ChangeEvent<HTMLFormElement>): void => {
+    const formElement: EventTarget & HTMLFormElement = event.target;
+
+    switch (formElement.name) {
+      case 'title':
+        return setTitle(formElement.value);
+
+      case 'description':
+        return setDescription(formElement.value);
+
+      case 'body':
+        return setBody(formElement.value);
+
+      case 'tag':
+        return setTag(formElement.value);
+    }
+  };
+
+  // Add tag to tag-list
+  const addTag = (e: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (e.code === 'Enter') {
+      e.preventDefault();
+      if (tag.trim() !== '' && !tagList.includes(tag)) {
+        setTagList((prev) => [...prev, tag]);
+        tagInput.current!.value = '';
+      }
+    }
+  };
+
+  // Delete tag from tag-list
+  const deleteTag = (tag: string): void => {
+    const filteredTagList = tagList.filter((el) => el !== tag);
+    setTagList(filteredTagList);
+  };
+
+  // Show tags in the form
+  const showTagList = () => {
+    if (tagList) {
+      return tagList.map((el, i) => <FormTag deleteTag={deleteTag} tag={el} key={i} />);
+    }
+  };
+
+  // Reacting to change of tag-list
+  useEffect(() => {
+    showTagList();
+  }, [tagList]);
 
   return (
-    <div className={'Editor'}>
+    <div className="Editor">
       <Container>
-        <div className={'Editor-body'}>
-          <form className={'Editor-form form'} onSubmit={submitHandler}>
+        <div className="Editor-row">
+          <form className="Editor-form" onChange={changeFormHandler}>
+            {errorForm && <li className="Editor-form__error">{errorForm}</li>}
+
             <input
-              className={'Editor-form__input form__input input'}
-              name={'title'}
+              className="Editor-form__title"
+              name="title"
               type="text"
-              placeholder={'Article Title'}
-              value={title}
-              onChange={titleChangeHandler}
+              placeholder="Article Title"
+              defaultValue={title}
             />
+
             <input
-              className={'Editor-form__input form__input input input_small'}
-              name={'description'}
+              className="Editor-form__description"
+              name="description"
               type="text"
-              placeholder={"What's this article about?"}
-              value={description}
-              onChange={descriptionChangeHandler}
+              placeholder="What's this article about?"
+              defaultValue={description}
             />
+
             <textarea
-              className={'Editor-form__textarea form__textarea textarea textarea_small'}
-              name={'text'}
-              placeholder={'Write your article (in markdown)'}
-              value={text}
-              onChange={textChangeHandler}
+              className="Editor-form__body"
+              name="body"
+              placeholder="Write your article (in markdown)"
+              defaultValue={body}
             />
+
             <input
-              className={'Editor-form__input form__input input input_small'}
-              name={'tags'}
+              className="Editor-form__tags"
+              ref={tagInput}
+              name="tag"
               type="text"
-              value={tag}
-              placeholder={'Enter tags'}
-              onChange={tagChangeHandler}
-              onKeyDown={tagsKeyHandler}
+              defaultValue={tag}
+              placeholder="Enter tags"
+              onKeyPress={addTag}
             />
-            <ul className={'Editor-form__taglist taglist'}>
-              {tags.map((tag) => {
-                return (
-                  <li key={tag} className={'taglist__elem'}>
-                    <span className={'taglist__button'} onMouseDown={() => deleteTag(tag)}>
-                      x
-                    </span>
-                    {tag}
-                  </li>
-                );
-              })}
-            </ul>
-            <button className={getClassname(disabled)} type={'submit'} disabled={disabled}>
-              Publish Article
-            </button>
+
+            <ul className="Editor-form__tag-list">{showTagList()}</ul>
+
+            <div className="Editor-form__bottom">
+              <button className="Editor-form__button" onClick={saveArticle}>
+                Publish Article
+              </button>
+            </div>
           </form>
         </div>
       </Container>

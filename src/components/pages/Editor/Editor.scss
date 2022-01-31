@@ -1,25 +1,107 @@
 @import '/src/sass/main';
 
 .Editor {
-  &-body {
-    @include flex(_,center,column);
-    width: 920px;
-    padding: 1.5rem 0;
-    margin: 0 auto;
+  @include block-format(_, 100%, 100%, 25px 0 0, 0);
+  @include page-min-height;
+  @include flex(center);
+
+  &-row {
+    @include block-format(_, 100%, 100%);
+    @include flex(center);
   }
 
   &-form {
-    width: 920px;
-    &__input,
-    &__textarea {
+    @include block-format(_, 100%, 100%, 0 0 1rem);
+    max-width: 920px;
+    @include flex(_, center, column);
+
+    &__error {
+      @include block-format(_, 100%, 100%, 0 0 1rem, 0 0 0 23px);
+      @include text-format(1rem, 700, $source-sans, $red, left, 0.05rem);
+      line-height: 1.5;
+
+      &::marker {
+        color: $red;
+        font-size: 1rem;
+      }
     }
 
-    &__taglist {
-      align-self: flex-start;
+    &__title {
+      @include inp-reset;
+      @include block-format(_, 100%, auto, 0 0 1rem, 0.75rem 1.5rem);
+      @include text-format(1.25rem, 400, $source-sans, $black-light, left);
+      line-height: 1.25;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.25rem;
+
+      &:focus {
+        border-color: $blue-light;
+      }
     }
 
-    &__input:nth-child(4) {
-      margin-bottom: 0.1rem;
+    &__description {
+      @include inp-reset;
+      @include block-format(_, 100%, auto, 0 0 1rem, 0.5rem 0.75rem);
+      @include text-format(1rem, 400, $source-sans, $black-light, left);
+      line-height: 1.25;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.25rem;
+
+      &:focus {
+        border-color: $blue-light;
+      }
+    }
+
+    &__body {
+      @include inp-reset;
+      @include block-format(_, 100%, 180px, 0 0 1rem, 0.5rem 0.75rem);
+      resize: vertical;
+      min-height: 50px;
+      @include text-format(1rem, 400, $source-sans, $black-light, left);
+      line-height: 1.25;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.25rem;
+
+      &:focus {
+        border-color: $blue-light;
+      }
+    }
+
+    &__tags {
+      @include inp-reset;
+      @include block-format(_, 100%, auto, 0, 0.5rem 0.75rem);
+      @include text-format(1rem, 400, $source-sans, $black-light, left);
+      line-height: 1.25;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.25rem;
+
+      &:focus {
+        border-color: $blue-light;
+      }
+    }
+
+    &__tag-list {
+      @include block-format(_, 100%, auto, 0.1rem 0 0);
+      @include flex();
+      flex-wrap: wrap;
+    }
+
+    &__bottom {
+      @include block-format(_, 100%, auto, 1rem 0);
+      @include flex(flex-end);
+    }
+
+    &__button {
+      @include btn-reset;
+      @include block-format(_, auto, auto, 0, 0.75rem 1.5rem, $green);
+      @include text-format(1.25rem, 400, $source-sans, $white);
+      line-height: 1.25;
+      border: 1px solid $green;
+      border-radius: 0.3rem;
+
+      &:hover {
+        background: $green-gray;
+      }
     }
   }
 }
