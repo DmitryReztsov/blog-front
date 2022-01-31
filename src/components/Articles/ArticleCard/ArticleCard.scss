@@ -28,6 +28,7 @@
         @include text-format(1rem, 300, $source-sans, $green, left);
         @include flex(_, center);
         cursor: pointer;
+
         &:hover {
           text-decoration: underline;
         }
@@ -48,6 +49,7 @@
       line-height: 1.25;
       border: 1px solid $green;
       border-radius: 0.2rem;
+
       &:hover {
         background: $green;
         color: $white;

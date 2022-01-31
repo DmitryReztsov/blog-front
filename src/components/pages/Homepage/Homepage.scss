@@ -20,6 +20,7 @@
 
       &_link {
         @include homepage-navbar-link;
+
         &:hover {
           color: $black;
         }

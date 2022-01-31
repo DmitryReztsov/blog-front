@@ -19,6 +19,7 @@
       @include block-format(_, 100%, 100%, 0 0 1rem, 0 0 0 23px);
       @include text-format(1rem, 700, $source-sans, $red, left, 0.05rem);
       line-height: 1.5;
+
       &::marker {
         color: $red;
         font-size: 1rem;
@@ -32,6 +33,7 @@
       line-height: 1.25;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0.25rem;
+
       &:focus {
         border-color: $blue-light;
       }
@@ -44,6 +46,7 @@
       line-height: 1.25;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0.25rem;
+
       &:focus {
         border-color: $blue-light;
       }
@@ -58,6 +61,7 @@
       line-height: 1.25;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0.25rem;
+
       &:focus {
         border-color: $blue-light;
       }
@@ -70,6 +74,7 @@
       line-height: 1.25;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0.25rem;
+
       &:focus {
         border-color: $blue-light;
       }
@@ -93,6 +98,7 @@
       line-height: 1.25;
       border: 1px solid $green;
       border-radius: 0.3rem;
+
       &:hover {
         background: $green-gray;
       }

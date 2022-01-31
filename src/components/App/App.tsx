@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { authUser } from '../../store/user/actions';
 import { getToken } from '../../utils/common/common';
 import Article from '../pages/Article/Article';
+import './App.scss';
 
 function App() {
   const dispatch = useDispatch();
@@ -20,7 +21,6 @@ function App() {
   // Аутентификация
   useEffect(() => {
     const token = getToken();
-    console.log(token);
     if (token) {
       dispatch(authUser());
     }

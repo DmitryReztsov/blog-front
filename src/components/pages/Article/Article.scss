@@ -42,6 +42,7 @@
         @include text-format(1rem, 300, $source-sans, $white, left);
         @include flex(_, center);
         cursor: pointer;
+
         &:hover {
           text-decoration: underline;
         }
@@ -62,6 +63,7 @@
       line-height: 1.25;
       border: 1px solid $gray-ultra-light;
       border-radius: 0.2rem;
+
       &:hover {
         background: $gray-ultra-light;
         color: $white;
@@ -118,6 +120,7 @@
         @include text-format(1rem, 300, $source-sans, $green, left);
         @include flex(_, center);
         cursor: pointer;
+
         &:hover {
           text-decoration: underline;
         }
@@ -138,6 +141,7 @@
       line-height: 1.25;
       border: 1px solid $gray-ultra-light;
       border-radius: 0.2rem;
+
       &:hover {
         background: $gray-ultra-light;
         color: $white;
@@ -151,6 +155,7 @@
       line-height: 1.25;
       border: 1px solid $red;
       border-radius: 0.2rem;
+
       &:hover {
         background: $red;
         color: $white;
@@ -193,6 +198,7 @@
         line-height: 1.25;
         border: 1px solid $green;
         border-radius: 0.2rem;
+
         &:hover {
           background: $green-gray;
         }
