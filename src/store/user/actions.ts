@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
 import { UserAction, UserActionTypes } from './types';
 import { getUrl, URLS } from '../../utils/urls/urls';
-import { getToken, parseError } from '../../utils/common/common';
+import { deleteCookie, getToken, parseError, setCookie } from '../../utils/common/common';
+import { IOptions } from '../../utils/types/types';
 
 export const setUser = (email: string, password: string) => {
   return async (dispatch: Dispatch<UserAction>) => {
@@ -16,7 +17,7 @@ export const setUser = (email: string, password: string) => {
     try {
       dispatch({ type: UserActionTypes.LOADING_USER });
 
-      result = await doRequest(user, 'POST', URLS.LOGIN_URL, false);
+      result = await doRequest(user, 'POST', URLS.LOGIN_USER, false);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -24,7 +25,7 @@ export const setUser = (email: string, password: string) => {
       }
 
       // сохраняем токен в куках для аутентификации пользователя
-      document.cookie = `jwtToken=${result.user.token}`;
+      setCookie('jwtToken', result.user.token);
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -49,7 +50,7 @@ export const registerUser = (username: string, email: string, password: string) 
     try {
       dispatch({ type: UserActionTypes.LOADING_USER });
 
-      result = await doRequest(user, 'POST', URLS.REGISTER_URL, false);
+      result = await doRequest(user, 'POST', URLS.REGISTER_USER, false);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -57,7 +58,7 @@ export const registerUser = (username: string, email: string, password: string) 
       }
 
       // сохраняем токен в куках для аутентификации пользователя
-      document.cookie = `jwtToken=${result.user.token}`;
+      setCookie('jwtToken', result.user.token);
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -73,7 +74,7 @@ export const authUser = () => {
   return async (dispatch: Dispatch<UserAction>) => {
     let result: any;
     try {
-      result = await doRequest('', 'GET', URLS.AUTH_URL, true);
+      result = await doRequest('', 'GET', URLS.AUTH_USER, true);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -81,7 +82,7 @@ export const authUser = () => {
       }
 
       // сохраняем токен в куках для аутентификации пользователя
-      document.cookie = `jwtToken=${result.user.token}`;
+      setCookie('jwtToken', result.user.token);
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -92,7 +93,8 @@ export const authUser = () => {
 
 export const clearUser = () => {
   // очищаем куки перед разлогированием!
-  document.cookie = 'jwtToken' + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  deleteCookie();
+  // document.cookie = 'jwtToken' + '=; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   return { type: UserActionTypes.CLEAR_USER };
 };
 
@@ -118,7 +120,7 @@ export const updateUser = (
     try {
       dispatch({ type: UserActionTypes.LOADING_USER });
 
-      result = await doRequest(user, 'PUT', URLS.UPDATE_URL, true);
+      result = await doRequest(user, 'PUT', URLS.UPDATE_USER, true);
 
       // если мы ввели неправильные данные...
       if (result.status === 422) {
@@ -126,7 +128,7 @@ export const updateUser = (
       }
 
       // сохраняем токен в куках для аутентификации пользователя
-      document.cookie = `jwtToken=${result.user.token}`;
+      setCookie('jwtToken', result.user.token);
 
       dispatch({ type: UserActionTypes.SET_USER, payload: result.user });
     } catch (e) {
@@ -137,12 +139,6 @@ export const updateUser = (
     }
   };
 };
-
-interface IOptions extends RequestInit {
-  method: string;
-  headers: { 'Content-Type': string; Authorization?: string };
-  body?: string;
-}
 
 async function doRequest<T>(data: T, method: string, url: string, auth: boolean) {
   const options: IOptions = {

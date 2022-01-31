@@ -20,6 +20,7 @@ function App() {
   // Аутентификация
   useEffect(() => {
     const token = getToken();
+    console.log(token);
     if (token) {
       dispatch(authUser());
     }
