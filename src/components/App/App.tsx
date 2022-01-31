@@ -21,12 +21,12 @@ function App() {
   useEffect(() => {
     const token = getToken();
     if (token) {
-      dispatch(authUser(token));
+      dispatch(authUser());
     }
   }, []);
 
   return (
-    <div className={'app'}>
+    <div className={'App'}>
       <Routes>
         <Route path={'/'} element={<Layout />}>
           <Route index element={<Homepage />} />
