@@ -3,113 +3,116 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { addArticle, getArticle, loadArticle } from '../../../store/article/actions';
 import { useTypedSelector } from '../../../store/selectors';
+import {
+  addArticle,
+  getGlobalArticles,
+  setEditorMode,
+  setFetchMode,
+  updateArticle,
+} from '../../../store/article/actions';
 
 import Container from '../../Container/Container';
 import FormTag from '../../Tags/FormTag/FormTag';
 
 import './Editor.scss';
+import { EDITOR_MODE, FETCH_MODE, IArticle } from '../../../store/article/types';
 
 const Editor: FC = () => {
+  // states from store
+  const { articles, editArticle, editorMode, fetchMode } = useTypedSelector(
+    (state) => state.article
+  );
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   // form fields
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [body, setBody] = useState<string>('');
   const [tagList, setTagList] = useState<string[]>([]);
 
-  // error form
-  const [errorForm, setErrorForm] = useState<string | null>(null);
-  const [checkUnique, setCheckUnique] = useState<boolean>(false);
-  const [creatingArticle, setCreatingArticle] = useState<boolean>(false);
-
   // tag form
   const [tag, setTag] = useState<string>('');
   const tagInput = useRef<HTMLInputElement>(null);
 
-  const dispatch = useDispatch();
-  const { articles, loading, error } = useTypedSelector((state) => state.article);
+  // error form
+  const [errorForm, setErrorForm] = useState<string | null>(null);
 
-  const navigate = useNavigate();
+  /* ----- Edition article mode ----- */
+  useEffect(() => {
+    if (editorMode === EDITOR_MODE.EDIT_MODE && editArticle) {
+      setTitle(editArticle.title);
+      setDescription(editArticle.description);
+      setBody(editArticle.body);
+      setTagList(editArticle.tagList);
+    }
+  }, []);
 
-  // send form fields to server and add new Article
-  const saveArticle = (e: React.MouseEvent<HTMLButtonElement>): void => {
-    e.preventDefault();
-    submitForm();
+  const saveChanges = () => {
+    setErrorForm(null);
+    dispatch(setEditorMode(EDITOR_MODE.CREATE_MODE));
+    dispatch(setFetchMode(FETCH_MODE.FETCHING));
+    dispatch(updateArticle({ title, description, body, tagList }, editArticle.slug));
+  };
+
+  /* ----- Creating article mode ----- */
+  useEffect(() => {
+    dispatch(getGlobalArticles());
+  }, []);
+
+  useEffect(() => {
+    if (fetchMode === FETCH_MODE.FETCHED) {
+      dispatch(setFetchMode(FETCH_MODE.RELAXED));
+      navigate(`/article/${title}`);
+    }
+  }, [fetchMode]);
+
+  // add new Article
+  const createArticle = (): void => {
+    setErrorForm(null);
+    dispatch(setFetchMode(FETCH_MODE.FETCHING));
+    dispatch(addArticle({ title, description, body, tagList }));
   };
 
   // check form fields
-  const submitForm = () => {
-    if (!title.trim()) {
-      setErrorForm("title can't be blank");
-      return false;
-    }
-    if (!description.trim()) {
-      setErrorForm("description can't be blank");
-      return false;
-    }
-    if (!body.trim()) {
-      setErrorForm("body can't be blank");
-      return false;
-    }
-
-    checkTitleUnique(title);
+  const submitForm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(title, description, body, tagList);
+    e.preventDefault();
+    return !title.trim() // check title
+      ? setErrorForm("title can't be blank")
+      : !description.trim() // check description
+      ? setErrorForm("description can't be blank")
+      : !body.trim() // check body
+      ? setErrorForm("body can't be blank")
+      : !checkTitleUnique(title) // if the create mode check for uniqueness
+      ? setErrorForm('title must be unique')
+      : editorMode === EDITOR_MODE.EDIT_MODE // if the edit mode, save changes or create article
+      ? saveChanges()
+      : createArticle();
   };
 
-  // check title unique
-  const checkTitleUnique = async (title: string) => {
-    setCheckUnique(true);
-    dispatch(loadArticle());
-    dispatch(getArticle(title));
+  // check title for uniqueness
+  const checkTitleUnique = (title: string): boolean => {
+    const twin = articles.filter((el: IArticle) => {
+      if (el.title.toLowerCase() === editArticle.title) return false;
+      return el.title.toLowerCase() === title.trim().toLowerCase();
+    });
+
+    return !twin.length;
   };
 
-  // check unique title by loading articles
-  useEffect(() => {
-    if (articles && !loading && checkUnique) {
-      let unique = true;
-
-      articles.map((el: any) => {
-        if (el.title.toLowerCase() === title.trim().toLowerCase()) {
-          unique = false;
-        }
-      });
-      if (!unique) {
-        setCheckUnique(false);
-        setErrorForm('title must be unique');
-      } else {
-        setCheckUnique(false);
-        setErrorForm(null);
-        dispatch(addArticle({ title, description, body, tagList }));
-        setCreatingArticle(true);
-      }
-    }
-  }, [checkUnique, loading]);
-
-  // redirect to new article
-  useEffect(() => {
-    if (creatingArticle) {
-      if (!loading && !error) {
-        console.log('create & redirect');
-        setCreatingArticle(false);
-        setTimeout(() => navigate(`article/${title}`), 1500);
-      }
-    }
-  }, [creatingArticle, loading]);
-
-  // Save form fileds
+  // save form fileds
   const changeFormHandler = (event: React.ChangeEvent<HTMLFormElement>): void => {
     const formElement: EventTarget & HTMLFormElement = event.target;
 
     switch (formElement.name) {
       case 'title':
         return setTitle(formElement.value);
-
       case 'description':
         return setDescription(formElement.value);
-
       case 'body':
         return setBody(formElement.value);
-
       case 'tag':
         return setTag(formElement.value);
     }
@@ -139,16 +142,14 @@ const Editor: FC = () => {
     }
   };
 
-  // Reacting to change of tag-list
-  useEffect(() => {
-    showTagList();
-  }, [tagList]);
-
   return (
     <div className="Editor">
       <Container>
         <div className="Editor-row">
-          <form className="Editor-form" onChange={changeFormHandler}>
+          <form
+            className={fetchMode === 'FETCHING' ? 'Editor-form disabled' : 'Editor-form'}
+            onChange={changeFormHandler}
+          >
             {errorForm && <li className="Editor-form__error">{errorForm}</li>}
 
             <input
@@ -157,6 +158,7 @@ const Editor: FC = () => {
               type="text"
               placeholder="Article Title"
               defaultValue={title}
+              disabled={fetchMode === 'FETCHING' ? true : false}
             />
 
             <input
@@ -165,6 +167,7 @@ const Editor: FC = () => {
               type="text"
               placeholder="What's this article about?"
               defaultValue={description}
+              disabled={fetchMode === 'FETCHING' ? true : false}
             />
 
             <textarea
@@ -172,6 +175,7 @@ const Editor: FC = () => {
               name="body"
               placeholder="Write your article (in markdown)"
               defaultValue={body}
+              disabled={fetchMode === 'FETCHING' ? true : false}
             />
 
             <input
@@ -182,12 +186,17 @@ const Editor: FC = () => {
               defaultValue={tag}
               placeholder="Enter tags"
               onKeyPress={addTag}
+              disabled={fetchMode === 'FETCHING' ? true : false}
             />
 
             <ul className="Editor-form__tag-list">{showTagList()}</ul>
 
             <div className="Editor-form__bottom">
-              <button className="Editor-form__button" onClick={saveArticle}>
+              <button
+                className="Editor-form__button"
+                onClick={submitForm}
+                disabled={fetchMode === 'FETCHING' ? true : false}
+              >
                 Publish Article
               </button>
             </div>

@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { dateFormat } from '../../../utils/common/common';
 
 import CardTag from '../../Tags/CardTag/CardTag';
 
-import useDateFormat from '../../../utils/hooks/useDateFormat';
 import './ArticleCard.scss';
 
 interface IArticleProps {
@@ -23,6 +23,9 @@ const ArticleCard: FC<IArticleProps> = ({ articleData }) => {
   const linkToArticle = (e: React.MouseEvent) => {
     navigate(`article/${articleData.title}`);
   };
+
+  if (!articleData) return <></>;
+
   return (
     <div className="ArticleCard">
       <div className="ArticleCard-top">
@@ -33,9 +36,7 @@ const ArticleCard: FC<IArticleProps> = ({ articleData }) => {
           />
           <div className="ArticleCard-top__props">
             <div className="ArticleCard-top__props_userName">{articleData.author.username}</div>
-            <div className="ArticleCard-top__props_date">
-              {useDateFormat(articleData.createdAt)}
-            </div>
+            <div className="ArticleCard-top__props_date">{dateFormat(articleData.createdAt)}</div>
           </div>
         </div>
         <button className="ArticleCard-top__favorites">
