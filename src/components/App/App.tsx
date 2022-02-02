@@ -41,7 +41,7 @@ function App() {
             }
           />
           <Route
-            path={'editor/'}
+            path={'editor'}
             element={
               <RequireAuth>
                 <Editor />
