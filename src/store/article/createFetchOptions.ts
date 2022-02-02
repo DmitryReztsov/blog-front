@@ -13,6 +13,17 @@ export const createFetchOptions = () => {
     };
   };
 
+  const updateArticleOptions = (data: IArticle): fetchOptions => {
+    return {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${getToken()}`,
+      },
+      body: JSON.stringify({ article: data }),
+    };
+  };
+
   const removeArticleOptions = (): fetchOptions => {
     return {
       method: 'DELETE',
@@ -28,6 +39,16 @@ export const createFetchOptions = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Token ${getToken()}`,
+      },
+    };
+  };
+
+  const getFeedArticlesOptions = (): fetchOptions => {
+    return {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${getToken()}`,
       },
     };
@@ -52,11 +73,23 @@ export const createFetchOptions = () => {
     };
   };
 
+  const getTagsOptions = (): fetchOptions => {
+    return {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    };
+  };
+
   return {
     addArticleOptions,
+    updateArticleOptions,
     removeArticleOptions,
     getArticleOptions,
     getGlobalArticlesOptions,
     getUserArticlesOptions,
+    getFeedArticlesOptions,
+    getTagsOptions,
   };
 };
