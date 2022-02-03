@@ -38,7 +38,7 @@ export const updateArticle =
     const { updateArticleOptions } = createFetchOptions();
     const { getGlobalArticlesOptions } = createFetchOptions();
     const url = URLS.UPDATE_ARTICLE + slug;
-    console.log(body);
+
     await fetchAction(url, updateArticleOptions(body));
 
     const { data, error } = await fetchAction(
@@ -82,21 +82,20 @@ export const removeArticle = (slug: string) => async (dispatch: Dispatch<Article
 };
 
 // get article
-export const getArticle = (slug: string) => async (dispatch: Dispatch<ArticleAction>) => {
-  const { getArticleOptions } = createFetchOptions();
-  const url = URLS.GET_ARTICLE_URL + slug;
+// export const getArticle = () => async (dispatch: Dispatch<ArticleAction>) => {
+//   const { getArticleOptions } = createFetchOptions();
 
-  const { data, error } = await fetchAction(url, getArticleOptions());
+//   const { data, error } = await fetchAction(URLS.GET_ARTICLE_URL, getArticleOptions());
 
-  if (error) {
-    throw new Error("Can't get article: " + error);
-  }
+//   if (error) {
+//     throw new Error("Can't get article: " + error);
+//   }
 
-  dispatch({
-    type: ArticleActionTypes.GET_ARTICLE,
-    payload: { articles: data, error, loading: false },
-  });
-};
+//   dispatch({
+//     type: ArticleActionTypes.GET_ARTICLE,
+//     payload: { user: data, fetchMode: FETCH_MODE.FETCHED },
+//   });
+// };
 
 // set article for edition
 export const setEditArticle = (article: IArticle) => (dispatch: Dispatch<ArticleAction>) => {
@@ -155,7 +154,10 @@ export const getGlobalArticles = () => async (dispatch: Dispatch<ArticleAction>)
     throw new Error("Can't get articles: " + error);
   }
 
-  dispatch({ type: ArticleActionTypes.GET_GLOBAL_ARTICLES, payload: { articles: data, error } });
+  dispatch({
+    type: ArticleActionTypes.GET_GLOBAL_ARTICLES,
+    payload: { articles: data, error },
+  });
 };
 
 // get tags
@@ -174,4 +176,104 @@ export const getTags = () => async (dispatch: Dispatch<ArticleAction>) => {
 // set fetch mode
 export const setFetchMode = (fetchMode: FETCH_MODE) => (dispatch: Dispatch<ArticleAction>) => {
   dispatch({ type: ArticleActionTypes.SET_FETCH_MODE, payload: { fetchMode } });
+};
+
+// favorite article
+export const favoriteArticle = (slug: string) => async (dispatch: Dispatch<ArticleAction>) => {
+  const { getGlobalArticlesOptions, favoriteArticleOptions } = createFetchOptions();
+  const url = URLS.FAVORITE_ARTICLE_URL + slug + '/favorite/';
+
+  await fetchAction(url, favoriteArticleOptions());
+
+  const { data, error } = await fetchAction(
+    URLS.GET_GLOBAL_ARTICLES_URL,
+    getGlobalArticlesOptions()
+  );
+
+  if (error) {
+    throw new Error("Can't unfavorite article: " + error);
+  }
+
+  dispatch({
+    type: ArticleActionTypes.FAVORITE_ARTICLE,
+    payload: { articles: data, fetchMode: FETCH_MODE.FETCHED },
+  });
+};
+
+// unfavorite article
+export const unfavoriteArticle = (slug: string) => async (dispatch: Dispatch<ArticleAction>) => {
+  const { getGlobalArticlesOptions, unfavoriteArticleOptions } = createFetchOptions();
+  const url = URLS.UNFAVORITE_ARTICLE_URL + slug + '/favorite/';
+
+  await fetchAction(url, unfavoriteArticleOptions());
+
+  const { data, error } = await fetchAction(
+    URLS.GET_GLOBAL_ARTICLES_URL,
+    getGlobalArticlesOptions()
+  );
+
+  if (error) {
+    throw new Error("Can't favorite article: " + error);
+  }
+
+  dispatch({
+    type: ArticleActionTypes.UNFAVORITE_ARTICLE,
+    payload: { articles: data, fetchMode: FETCH_MODE.FETCHED },
+  });
+};
+
+// add comment to an article
+export const addComment =
+  (slug: string, body: string) => async (dispatch: Dispatch<ArticleAction>) => {
+    const { addCommentOptions, getCommentsOptions } = createFetchOptions();
+    const url = URLS.ADD_COMMENT_URL + slug + '/comments';
+
+    await fetchAction(url, addCommentOptions(body));
+    const { data, error } = await fetchAction(url, getCommentsOptions());
+
+    if (error) {
+      throw new Error("Can't add comment: " + error);
+    }
+
+    dispatch({
+      type: ArticleActionTypes.ADD_COMMENT,
+      payload: { comments: data, fetchMode: FETCH_MODE.FETCHED },
+    });
+  };
+
+// delete comment
+export const deleteComment =
+  (slug: string, id: string) => async (dispatch: Dispatch<ArticleAction>) => {
+    const { deleteCommentOptions, getCommentsOptions } = createFetchOptions();
+    const url = URLS.DELETE_COMMENT_URL + slug + '/comments/' + id;
+
+    await fetchAction(url, deleteCommentOptions());
+
+    const getUrl = URLS.GET_COMMENTS_URL + slug + '/comments';
+    const { data, error } = await fetchAction(getUrl, getCommentsOptions());
+    if (error) {
+      throw new Error("Can't delete comment: " + error);
+    }
+
+    dispatch({
+      type: ArticleActionTypes.DELETE_COMMENT,
+      payload: { comments: data, fetchMode: FETCH_MODE.FETCHED },
+    });
+  };
+
+// get comments from an article
+export const getComments = (slug: string) => async (dispatch: Dispatch<ArticleAction>) => {
+  const { getCommentsOptions } = createFetchOptions();
+  const url = URLS.GET_COMMENTS_URL + slug + '/comments';
+
+  const { data, error } = await fetchAction(url, getCommentsOptions());
+
+  if (error) {
+    throw new Error("Can't get comments: " + error);
+  }
+
+  dispatch({
+    type: ArticleActionTypes.GET_COMMENTS,
+    payload: { comments: data, fetchMode: FETCH_MODE.FETCHED },
+  });
 };
