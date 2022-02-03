@@ -10,6 +10,7 @@ const fetchAction = async (url: string, options: RequestInit) => {
   };
 
   try {
+    // console.log(options);
     const response = await fetch(url!, options);
     // console.log(response);
     if (!response.ok) {

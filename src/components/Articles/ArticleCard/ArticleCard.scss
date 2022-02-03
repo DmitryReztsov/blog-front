@@ -12,47 +12,16 @@
       @include flex();
     }
 
-    &__icon {
-      @include block-format(_, 32px, 32px);
-      border-radius: 30px;
-      cursor: pointer;
-    }
-
     &__props {
       margin: 0 1.5rem 0 0.3rem;
       vertical-align: center;
       @include flex(_, _, column);
-
-      &_userName {
-        height: 16px;
-        @include text-format(1rem, 300, $source-sans, $green, left);
-        @include flex(_, center);
-        cursor: pointer;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
 
       &_date {
         height: 16px;
         @include text-format(0.8rem, 300, $source-sans, $gray-lazy, left);
         @include flex(_, center);
         opacity: 0.55;
-      }
-    }
-
-    &__favorites {
-      @include btn-reset();
-      padding: 0.25rem 0.5rem;
-      @include text-format(0.875rem, 400, $source-sans, $green);
-      line-height: 1.25;
-      border: 1px solid $green;
-      border-radius: 0.2rem;
-
-      &:hover {
-        background: $green;
-        color: $white;
       }
     }
   }

@@ -12,8 +12,8 @@ const Footer: FC = () => {
             conduit
           </NavLink>
           <p className="Footer-text">
-            © 2022. An interactive learning project from <span>Thinkster</span>. Code licensed under
-            MIT.
+            © 2022. An interactive learning project from{' '}
+            <a href="https://thinkster.io">Thinkster</a>. Code licensed under MIT.
           </p>
         </div>
       </Container>

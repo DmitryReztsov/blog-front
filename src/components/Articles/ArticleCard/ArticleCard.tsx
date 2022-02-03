@@ -1,9 +1,13 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FAVORITE_BTN_MODE } from '../../../store/article/types';
+import FavoriteArticleBtn from '../../Buttons/FavoriteArticleBtn/FavoriteArticleBtn';
 
 import CardTag from '../../Tags/CardTag/CardTag';
+import ArticleDate from '../ArticleDate/ArticleDate';
+import ArticleIcon from '../ArticleIcon/ArticleIcon';
+import ArticleUsername from '../ArticleUsername/ArticleUsername';
 
-import useDateFormat from '../../../utils/hooks/useDateFormat';
 import './ArticleCard.scss';
 
 interface IArticleProps {
@@ -13,7 +17,10 @@ interface IArticleProps {
     favoritesCount: number;
     title: string;
     description: string;
+    body: string;
     tagList: string[] | [];
+    slug: string;
+    favorited: boolean;
   };
 }
 
@@ -21,27 +28,24 @@ const ArticleCard: FC<IArticleProps> = ({ articleData }) => {
   const navigate = useNavigate();
 
   const linkToArticle = (e: React.MouseEvent) => {
-    navigate(`article/${articleData.title}`);
+    navigate(`/article/${articleData.title}`);
   };
+
+  if (!articleData) return <></>;
+
   return (
     <div className="ArticleCard">
       <div className="ArticleCard-top">
         <div className="ArticleCard-top__userBlock">
-          <img
-            className="ArticleCard-top__icon"
-            src="https://api.realworld.io/images/demo-avatar.png"
-          />
+          <ArticleIcon username={articleData.author.username} />
           <div className="ArticleCard-top__props">
-            <div className="ArticleCard-top__props_userName">{articleData.author.username}</div>
+            <ArticleUsername username={articleData.author.username} />
             <div className="ArticleCard-top__props_date">
-              {useDateFormat(articleData.createdAt)}
+              {<ArticleDate date={articleData.createdAt} />}
             </div>
           </div>
         </div>
-        <button className="ArticleCard-top__favorites">
-          <i className="ion-heart">&nbsp;</i>
-          {articleData.favoritesCount}
-        </button>
+        <FavoriteArticleBtn article={articleData} mode={FAVORITE_BTN_MODE.CARD_MODE} />
       </div>
 
       <h1 className="ArticleCard-title" onClick={linkToArticle}>
@@ -64,4 +68,8 @@ const ArticleCard: FC<IArticleProps> = ({ articleData }) => {
   );
 };
 
-export default ArticleCard;
+const compareArticleData = (prevProps: any, nextProps: any) => {
+  return prevProps === nextProps;
+};
+
+export default React.memo(ArticleCard);

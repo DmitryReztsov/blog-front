@@ -15,15 +15,9 @@
     max-width: 920px;
     @include flex(_, center, column);
 
-    &__error {
-      @include block-format(_, 100%, 100%, 0 0 1rem, 0 0 0 23px);
-      @include text-format(1rem, 700, $source-sans, $red, left, 0.05rem);
-      line-height: 1.5;
-
-      &::marker {
-        color: $red;
-        font-size: 1rem;
-      }
+    &.disabled {
+      cursor: not-allowed;
+      z-index: 100;
     }
 
     &__title {
@@ -37,6 +31,10 @@
       &:focus {
         border-color: $blue-light;
       }
+      &:disabled {
+        background: $gray-light;
+        cursor: not-allowed;
+      }
     }
 
     &__description {
@@ -46,9 +44,12 @@
       line-height: 1.25;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0.25rem;
-
       &:focus {
         border-color: $blue-light;
+      }
+      &:disabled {
+        background: $gray-light;
+        cursor: not-allowed;
       }
     }
 
@@ -61,9 +62,12 @@
       line-height: 1.25;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0.25rem;
-
       &:focus {
         border-color: $blue-light;
+      }
+      &:disabled {
+        background: $gray-light;
+        cursor: not-allowed;
       }
     }
 
@@ -74,9 +78,12 @@
       line-height: 1.25;
       border: 1px solid rgba(0, 0, 0, 0.15);
       border-radius: 0.25rem;
-
       &:focus {
         border-color: $blue-light;
+      }
+      &:disabled {
+        background: $gray-light;
+        cursor: not-allowed;
       }
     }
 
@@ -98,9 +105,11 @@
       line-height: 1.25;
       border: 1px solid $green;
       border-radius: 0.3rem;
-
       &:hover {
         background: $green-gray;
+      }
+      &:disabled {
+        cursor: not-allowed;
       }
     }
   }

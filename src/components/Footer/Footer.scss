@@ -24,11 +24,11 @@
     margin-left: 10px;
     @include text-format(13px, 400, $source-sans, $gray);
 
-    span {
+    a {
+      text-decoration: none;
       @include text-format(13px, 400, $source-sans, $green);
 
       &:hover {
-        cursor: pointer;
         text-decoration: underline;
         color: $green-dark;
       }
