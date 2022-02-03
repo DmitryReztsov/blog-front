@@ -7,7 +7,7 @@ import { useTypedSelector } from '../../../store/selectors';
 import './EditArticleBtn.scss';
 
 interface IEditArticleBtnPpops {
-  article: IArticle;
+  article: IArticle | undefined;
 }
 
 const EditArticleBtn: FC<IEditArticleBtnPpops> = ({ article }) => {
@@ -16,7 +16,7 @@ const EditArticleBtn: FC<IEditArticleBtnPpops> = ({ article }) => {
   const { editArticle, editorMode } = useTypedSelector<IArticleState>((state) => state.article);
 
   const changeArticle = () => {
-    dispatch(setEditArticle(article));
+    dispatch(setEditArticle(article!));
     dispatch(setEditorMode(EDITOR_MODE.EDIT_MODE));
     navigate(`/editor`);
   };

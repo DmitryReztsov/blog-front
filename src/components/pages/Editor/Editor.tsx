@@ -17,6 +17,7 @@ import FormTag from '../../Tags/FormTag/FormTag';
 
 import './Editor.scss';
 import { EDITOR_MODE, FETCH_MODE, IArticle } from '../../../store/article/types';
+import FormError from '../../Errors/FormError/FormError';
 
 const Editor: FC = () => {
   // states from store
@@ -37,7 +38,7 @@ const Editor: FC = () => {
   const tagInput = useRef<HTMLInputElement>(null);
 
   // error form
-  const [errorForm, setErrorForm] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   /* ----- Edition article mode ----- */
   useEffect(() => {
@@ -50,7 +51,7 @@ const Editor: FC = () => {
   }, []);
 
   const saveChanges = () => {
-    setErrorForm(null);
+    setErrorMessage(null);
     dispatch(setEditorMode(EDITOR_MODE.CREATE_MODE));
     dispatch(setFetchMode(FETCH_MODE.FETCHING));
     dispatch(updateArticle({ title, description, body, tagList }, editArticle.slug));
@@ -70,41 +71,41 @@ const Editor: FC = () => {
 
   // add new Article
   const createArticle = (): void => {
-    setErrorForm(null);
+    setErrorMessage(null);
     dispatch(setFetchMode(FETCH_MODE.FETCHING));
     dispatch(addArticle({ title, description, body, tagList }));
   };
 
   // check form fields
   const submitForm = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(title, description, body, tagList);
     e.preventDefault();
     return !title.trim() // check title
-      ? setErrorForm("title can't be blank")
+      ? setErrorMessage("title can't be blank")
       : !description.trim() // check description
-      ? setErrorForm("description can't be blank")
+      ? setErrorMessage("description can't be blank")
       : !body.trim() // check body
-      ? setErrorForm("body can't be blank")
-      : !checkTitleUnique(title) // if the create mode check for uniqueness
-      ? setErrorForm('title must be unique')
+      ? setErrorMessage("body can't be blank")
       : editorMode === EDITOR_MODE.EDIT_MODE // if the edit mode, save changes or create article
       ? saveChanges()
+      : !checkTitleUnique(title) // if the create mode check for uniqueness
+      ? setErrorMessage('title must be unique')
       : createArticle();
   };
 
   // check title for uniqueness
   const checkTitleUnique = (title: string): boolean => {
-    const twin = articles.filter((el: IArticle) => {
-      if (el.title.toLowerCase() === editArticle.title) return false;
-      return el.title.toLowerCase() === title.trim().toLowerCase();
-    });
+    const twin = articles.filter(
+      (el: IArticle) => el.title.toLowerCase() === title.trim().toLowerCase()
+    );
 
     return !twin.length;
   };
 
   // save form fileds
-  const changeFormHandler = (event: React.ChangeEvent<HTMLFormElement>): void => {
-    const formElement: EventTarget & HTMLFormElement = event.target;
+  const changeFormHandler = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
+    const formElement: HTMLInputElement | HTMLTextAreaElement = event.target;
 
     switch (formElement.name) {
       case 'title':
@@ -124,7 +125,7 @@ const Editor: FC = () => {
       e.preventDefault();
       if (tag.trim() !== '' && !tagList.includes(tag)) {
         setTagList((prev) => [...prev, tag]);
-        tagInput.current!.value = '';
+        setTag('');
       }
     }
   };
@@ -146,19 +147,17 @@ const Editor: FC = () => {
     <div className="Editor">
       <Container>
         <div className="Editor-row">
-          <form
-            className={fetchMode === 'FETCHING' ? 'Editor-form disabled' : 'Editor-form'}
-            onChange={changeFormHandler}
-          >
-            {errorForm && <li className="Editor-form__error">{errorForm}</li>}
+          <form className={fetchMode === 'FETCHING' ? 'Editor-form disabled' : 'Editor-form'}>
+            {errorMessage && <FormError text={errorMessage} />}
 
             <input
               className="Editor-form__title"
               name="title"
               type="text"
               placeholder="Article Title"
-              defaultValue={title}
+              value={title}
               disabled={fetchMode === 'FETCHING' ? true : false}
+              onChange={changeFormHandler}
             />
 
             <input
@@ -166,27 +165,29 @@ const Editor: FC = () => {
               name="description"
               type="text"
               placeholder="What's this article about?"
-              defaultValue={description}
+              value={description}
               disabled={fetchMode === 'FETCHING' ? true : false}
+              onChange={changeFormHandler}
             />
 
             <textarea
               className="Editor-form__body"
               name="body"
               placeholder="Write your article (in markdown)"
-              defaultValue={body}
+              value={body}
               disabled={fetchMode === 'FETCHING' ? true : false}
+              onChange={changeFormHandler}
             />
 
             <input
               className="Editor-form__tags"
-              ref={tagInput}
               name="tag"
               type="text"
-              defaultValue={tag}
+              value={tag}
               placeholder="Enter tags"
               onKeyPress={addTag}
               disabled={fetchMode === 'FETCHING' ? true : false}
+              onChange={changeFormHandler}
             />
 
             <ul className="Editor-form__tag-list">{showTagList()}</ul>

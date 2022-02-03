@@ -6,7 +6,7 @@ export const createFetchOptions = () => {
     return {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({ article: data }),
@@ -17,7 +17,7 @@ export const createFetchOptions = () => {
     return {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,
       },
       body: JSON.stringify({ article: data }),
@@ -69,6 +69,7 @@ export const createFetchOptions = () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${getToken()}`,
       },
     };
   };
@@ -82,6 +83,57 @@ export const createFetchOptions = () => {
     };
   };
 
+  const favoriteArticleOptions = (): fetchOptions => {
+    return {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${getToken()}`,
+      },
+    };
+  };
+
+  const unfavoriteArticleOptions = (): fetchOptions => {
+    return {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Token ${getToken()}`,
+      },
+    };
+  };
+
+  const addCommentOptions = (data: string): fetchOptions => {
+    return {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Token ${getToken()}`,
+      },
+      body: JSON.stringify({ comment: { body: data } }),
+    };
+  };
+
+  const deleteCommentOptions = (): fetchOptions => {
+    return {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Token ${getToken()}`,
+      },
+    };
+  };
+
+  const getCommentsOptions = (): fetchOptions => {
+    return {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Token ${getToken()}`,
+      },
+    };
+  };
+
   return {
     addArticleOptions,
     updateArticleOptions,
@@ -91,5 +143,10 @@ export const createFetchOptions = () => {
     getUserArticlesOptions,
     getFeedArticlesOptions,
     getTagsOptions,
+    favoriteArticleOptions,
+    unfavoriteArticleOptions,
+    addCommentOptions,
+    deleteCommentOptions,
+    getCommentsOptions,
   };
 };

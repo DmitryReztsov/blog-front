@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import './FolowUserBtn.scss';
 
 interface IFolowUserBtnProps {
-  username: string;
+  username: string | undefined;
 }
 
 const FolowUserBtn: FC<IFolowUserBtnProps> = ({ username }) => {

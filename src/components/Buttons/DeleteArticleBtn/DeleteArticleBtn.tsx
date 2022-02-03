@@ -7,7 +7,7 @@ import { useTypedSelector } from '../../../store/selectors';
 import './DeleteArticleBtn.scss';
 
 interface IDeleteArticleBtnProps {
-  slug: string;
+  slug: string | undefined;
 }
 
 const DeleteArticleBtn: FC<IDeleteArticleBtnProps> = ({ slug }) => {
@@ -18,7 +18,7 @@ const DeleteArticleBtn: FC<IDeleteArticleBtnProps> = ({ slug }) => {
   // delete article and redirect to home
   const deleteArticle = () => {
     dispatch(setFetchMode(FETCH_MODE.FETCHING));
-    dispatch(removeArticle(slug));
+    dispatch(removeArticle(slug!));
   };
 
   useEffect(() => {

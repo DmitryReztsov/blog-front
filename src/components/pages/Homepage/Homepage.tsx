@@ -3,20 +3,22 @@ import { NavLink } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../store/selectors';
-import { ARTICLE_LIST_MODE } from '../../../store/article/types';
+import { ARTICLE_LIST_MODE, FETCH_MODE } from '../../../store/article/types';
 
 import Container from '../../Container/Container';
 import ArticleList from '../../Articles/ArticleList/ArticleList';
 import PopularTag from '../../Tags/PopularTag/PopularTag';
 import './Homepage.scss';
-import { getTags } from '../../../store/article/actions';
+import { getTags, setFetchMode } from '../../../store/article/actions';
 
 const Homepage: FC = () => {
-  const [articleMode, setArticleMode] = useState<ARTICLE_LIST_MODE>(ARTICLE_LIST_MODE.GLOBAL_MODE);
+  const [articleMode, setArticleMode] = useState<ARTICLE_LIST_MODE>(
+    ARTICLE_LIST_MODE.HOMEPAGE_GLOBAL_MODE
+  );
   const [tagList, setTagList] = useState<string[]>();
   const [tagName, setTagName] = useState<string | undefined>();
   const { user } = useTypedSelector((state) => state.user);
-  const { tags } = useTypedSelector((state) => state.article);
+  const { tags, fetchMode } = useTypedSelector((state) => state.article);
 
   const dispatch = useDispatch();
 
@@ -24,11 +26,15 @@ const Homepage: FC = () => {
     dispatch(getTags());
   }, []);
 
-  useEffect(() => setTagList(tags), [tags]);
+  useEffect(() => {
+    if (tags) {
+      setTagList(tags);
+    }
+  }, [tags]);
 
   const getArticlesByTag = (tag: string, e?: React.MouseEventHandler<HTMLParagraphElement>) => {
     setTagName(tag);
-    setArticleMode(ARTICLE_LIST_MODE.TAG_MODE);
+    setArticleMode(ARTICLE_LIST_MODE.HOMEPAGE_TAG_MODE);
   };
 
   return (
@@ -52,29 +58,29 @@ const Homepage: FC = () => {
             <nav className="Homepage-content__navbar">
               <NavLink
                 className={
-                  articleMode === ARTICLE_LIST_MODE.FEED_MODE
+                  articleMode === ARTICLE_LIST_MODE.HOMEPAGE_FEED_MODE
                     ? 'Homepage-content__navbar_link-active'
                     : 'Homepage-content__navbar_link'
                 }
                 to={'/'}
-                onClick={() => setArticleMode(ARTICLE_LIST_MODE.FEED_MODE)}
+                onClick={() => setArticleMode(ARTICLE_LIST_MODE.HOMEPAGE_FEED_MODE)}
               >
                 Your Feed
               </NavLink>
               <NavLink
                 className={
-                  articleMode === ARTICLE_LIST_MODE.GLOBAL_MODE
+                  articleMode === ARTICLE_LIST_MODE.HOMEPAGE_GLOBAL_MODE
                     ? 'Homepage-content__navbar_link-active'
                     : 'Homepage-content__navbar_link'
                 }
                 to={'/'}
-                onClick={() => setArticleMode(ARTICLE_LIST_MODE.GLOBAL_MODE)}
+                onClick={() => setArticleMode(ARTICLE_LIST_MODE.HOMEPAGE_GLOBAL_MODE)}
               >
                 Global Feed
               </NavLink>
               <div
                 className={
-                  articleMode === ARTICLE_LIST_MODE.TAG_MODE
+                  articleMode === ARTICLE_LIST_MODE.HOMEPAGE_TAG_MODE
                     ? 'Homepage-content__navbar_tagLink-active'
                     : 'Homepage-content__navbar_tagLink'
                 }
@@ -86,9 +92,13 @@ const Homepage: FC = () => {
               </div>
             </nav>
 
-            {articleMode === ARTICLE_LIST_MODE.FEED_MODE && <ArticleList mode={articleMode} />}
-            {articleMode === ARTICLE_LIST_MODE.GLOBAL_MODE && <ArticleList mode={articleMode} />}
-            {articleMode === ARTICLE_LIST_MODE.TAG_MODE && (
+            {articleMode === ARTICLE_LIST_MODE.HOMEPAGE_FEED_MODE && (
+              <ArticleList mode={articleMode} />
+            )}
+            {articleMode === ARTICLE_LIST_MODE.HOMEPAGE_GLOBAL_MODE && (
+              <ArticleList mode={articleMode} />
+            )}
+            {articleMode === ARTICLE_LIST_MODE.HOMEPAGE_TAG_MODE && (
               <ArticleList mode={articleMode} tag={tagName} />
             )}
             {/* Lists of articles end */}
