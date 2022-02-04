@@ -1,13 +1,12 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { FC, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../store/selectors';
 import {
-  addComment,
-  getComments,
   getGlobalArticles,
-  setFetchMode,
+  setButtonFetchMode,
+  setFormFetchMode,
 } from '../../../store/article/actions';
 
 import Container from '../../Container/Container';
@@ -18,81 +17,76 @@ import './Article.scss';
 import EditArticleBtn from '../../Buttons/EditArticleBtn/EditArticleBtn';
 import FolowUserBtn from '../../Buttons/FolowUserBtn/FolowUserBtn';
 import FavoriteArticleBtn from '../../Buttons/FavoriteArticleBtn/FavoriteArticleBtn';
-import { FAVORITE_BTN_MODE, FETCH_MODE, IArticle } from '../../../store/article/types';
+import {
+  BUTTON_FETCH_MODE,
+  FAVORITE_BTN_MODE,
+  FORM_FETCH_MODE,
+  IArticle,
+} from '../../../store/article/types';
 import ArticleIcon from '../../Articles/ArticleIcon/ArticleIcon';
 import ArticleUsername from '../../Articles/ArticleUsername/ArticleUsername';
-import { URLS } from '../../../utils/urls/urls';
-import CommentCard from '../../Comments/CommentCard/CommentCard';
+
 import ArticleDate from '../../Articles/ArticleDate/ArticleDate';
-import FormError from '../../Errors/FormError/FormError';
-import e from 'express';
+import NotFound from '../NotFound/NotFound';
+import CommentForm from '../../Forms/CommentForm/CommentForm';
+import CommentList from '../../Comments/CommentList/CommentList';
 
 const Article: FC = () => {
-  const { articles, fetchMode, comments } = useTypedSelector((state) => state.article);
+  const { articles, buttonFetchMode, formFetchMode } = useTypedSelector((state) => state.article);
   const { user } = useTypedSelector((state) => state.user);
   const [article, setArticle] = useState<IArticle>();
-  const [articleComments, setArticleComments] = useState<any[]>([]);
 
-  // form states
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [body, setBody] = useState<string>('');
-
-  useEffect(() => {
-    // console.log('articles', articles);
-    console.log('fetchMode', fetchMode);
-  }, [fetchMode]);
-
-  useCallback(() => {
-    if (fetchMode === FETCH_MODE.FETCHED) {
-      dispatch(setFetchMode(FETCH_MODE.RELAXED));
-    }
-  }, [fetchMode]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // get route params
   const params = useParams();
-  const title = params.title;
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    if (article) {
-      dispatch(getComments(article!.slug!));
+    if (buttonFetchMode === BUTTON_FETCH_MODE.FETCHED) {
+      dispatch(setButtonFetchMode(BUTTON_FETCH_MODE.NO_FETCH));
+      dispatch(getGlobalArticles());
     }
-
-    if (fetchMode === FETCH_MODE.FETCHED) {
-      dispatch(setFetchMode(FETCH_MODE.RELAXED));
-      console.log('relax and get comments');
-      dispatch(getComments(article!.slug!));
-    }
-  }, [article, fetchMode]);
+  }, [buttonFetchMode]);
 
   useEffect(() => {
-    if (comments) {
-      setArticleComments(comments);
+    if (formFetchMode === FORM_FETCH_MODE.FETCHED) {
+      dispatch(setFormFetchMode(FORM_FETCH_MODE.NO_FETCH));
+      dispatch(getGlobalArticles());
     }
-  }, [comments]);
+  }, [formFetchMode]);
 
   useEffect(() => {
-    articles.map((el: any) => {
-      if (el.title.trim().toLowerCase() === title!.trim().toLowerCase()) {
-        setArticle(el);
-      }
-    });
-  }, []);
-
-  const changeHandler = (e: React.FormEvent<HTMLTextAreaElement>) => {
-    setBody(e.currentTarget.value);
-  };
-
-  const submitForm = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (!body.trim()) {
-      return setErrorMessage("body can't be blank");
+    if (
+      buttonFetchMode === BUTTON_FETCH_MODE.FETCHED &&
+      formFetchMode === FORM_FETCH_MODE.FETCHING
+    ) {
+      dispatch(setFormFetchMode(FORM_FETCH_MODE.NO_FETCH));
+      dispatch(setButtonFetchMode(BUTTON_FETCH_MODE.NO_FETCH));
+      dispatch(getGlobalArticles());
     }
-    setErrorMessage(null);
-    setBody('');
-    dispatch(setFetchMode(FETCH_MODE.FETCHING));
-    dispatch(addComment(article!.slug!, body));
-  };
+  }, [formFetchMode, buttonFetchMode]);
+
+  useEffect(() => {
+    if (articles) {
+      let flag = false;
+      articles.map((el: any) => {
+        if (el.title.trim().toLowerCase() === params.title!.trim().toLowerCase()) {
+          setArticle(el);
+          flag = true;
+        }
+      });
+
+      flag ? false : navigate('/');
+    }
+  }, [articles]);
+
+  if (!article)
+    return (
+      <>
+        <NotFound />
+      </>
+    );
 
   return (
     <>
@@ -171,45 +165,8 @@ const Article: FC = () => {
 
         <Container>
           <div className="Article-bottom">
-            <div className="Article-bottom__error_block">
-              {errorMessage && <FormError text={errorMessage} />}
-            </div>
-
-            <form className="Article-bottom__form">
-              <textarea
-                className="Article-bottom__form_body"
-                name="body"
-                placeholder="Write a comment..."
-                value={body}
-                onChange={changeHandler}
-                disabled={fetchMode === FETCH_MODE.FETCHING ? true : false}
-              ></textarea>
-
-              <div className="Article-bottom__form_footer">
-                <img className="Article-bottom__form_icon" src={URLS.DEFAULT_LOGO} alt="smile" />
-
-                {user && (
-                  <button
-                    className="Article-bottom__form_btn"
-                    onClick={submitForm}
-                    disabled={fetchMode === FETCH_MODE.FETCHING ? true : false}
-                  >
-                    Post Comment
-                  </button>
-                )}
-              </div>
-            </form>
-            {articleComments &&
-              articleComments.map((el, i) => (
-                <CommentCard
-                  key={i}
-                  text={el.body}
-                  username={el.author.username}
-                  date={el.createdAt}
-                  slug={article!.slug}
-                  id={el.id}
-                />
-              ))}
+            <CommentForm slug={article!.slug!} />
+            <CommentList slug={article!.slug!} />
           </div>
         </Container>
       </div>

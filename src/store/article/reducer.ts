@@ -1,4 +1,11 @@
-import { ArticleAction, ArticleActionTypes, EDITOR_MODE, FETCH_MODE, IArticleState } from './types';
+import {
+  ArticleAction,
+  ArticleActionTypes,
+  BUTTON_FETCH_MODE,
+  EDITOR_MODE,
+  FORM_FETCH_MODE,
+  IArticleState,
+} from './types';
 
 const initialState: IArticleState = {
   articles: undefined,
@@ -7,20 +14,30 @@ const initialState: IArticleState = {
   editorMode: EDITOR_MODE.CREATE_MODE,
   tags: undefined,
   error: undefined,
-  fetchMode: FETCH_MODE.RELAXED,
+  formFetchMode: FORM_FETCH_MODE.NO_FETCH,
+  buttonFetchMode: BUTTON_FETCH_MODE.NO_FETCH,
   comments: [],
+  newArticle: { title: '' },
 };
 
-export function articleReducer(state: IArticleState = initialState, action: ArticleAction): any {
+export function articleReducer(
+  state: IArticleState = initialState,
+  action: ArticleAction
+): IArticleState {
   switch (action.type) {
     case ArticleActionTypes.ADD_ARTICLE:
-      return { ...state, ...action.payload.articles, fetchMode: action.payload.fetchMode };
+      return { ...state, ...action.payload.articles, formFetchMode: action.payload.formFetchMode };
 
     case ArticleActionTypes.UPDATE_ARTICLE:
-      return { ...state, ...action.payload.articles, fetchMode: action.payload.fetchMode };
+      return { ...state, ...action.payload.articles, formFetchMode: action.payload.formFetchMode };
 
     case ArticleActionTypes.REMOVE_ARTICLE:
-      return { ...state, ...action.payload.articles, fetchMode: action.payload.fetchMode };
+      return {
+        ...state,
+        ...action.payload.articles,
+        formFetchMode: action.payload.formFetchMode,
+        buttonFetchMode: action.payload.buttonFetchMode,
+      };
 
     // case ArticleActionTypes.GET_ARTICLE:
     //   return { ...state, error: action.payload.user };
@@ -43,23 +60,41 @@ export function articleReducer(state: IArticleState = initialState, action: Arti
     case ArticleActionTypes.GET_TAGS:
       return { ...state, ...action.payload.tags };
 
-    case ArticleActionTypes.SET_FETCH_MODE:
-      return { ...state, fetchMode: action.payload.fetchMode };
+    case ArticleActionTypes.SET_FORM_FETCH_MODE:
+      return { ...state, formFetchMode: action.payload.formFetchMode };
+
+    case ArticleActionTypes.SET_BUTTON_FETCH_MODE:
+      return { ...state, buttonFetchMode: action.payload.buttonFetchMode };
 
     case ArticleActionTypes.FAVORITE_ARTICLE:
-      return { ...state, ...action.payload.articles, fetchMode: action.payload.fetchMode };
+      return {
+        ...state,
+        ...action.payload.articles,
+        buttonFetchMode: action.payload.buttonFetchMode,
+      };
 
     case ArticleActionTypes.UNFAVORITE_ARTICLE:
-      return { ...state, ...action.payload.articles, fetchMode: action.payload.fetchMode };
+      return {
+        ...state,
+        ...action.payload.articles,
+        buttonFetchMode: action.payload.buttonFetchMode,
+      };
 
     case ArticleActionTypes.ADD_COMMENT:
-      return { ...state, ...action.payload.comments, ...action.payload.fetchMode };
+      return { ...state, ...action.payload.comments, formFetchMode: action.payload.formFetchMode };
 
     case ArticleActionTypes.DELETE_COMMENT:
-      return { ...state, ...action.payload.comments, ...action.payload.fetchMode };
+      return {
+        ...state,
+        ...action.payload.comments,
+        buttonFetchMode: action.payload.buttonFetchMode,
+      };
 
     case ArticleActionTypes.GET_COMMENTS:
       return { ...state, ...action.payload.comments };
+
+    case ArticleActionTypes.SET_NEW_ARTICLE:
+      return { ...state, newArticle: action.payload.newArticle };
 
     default:
       return state;

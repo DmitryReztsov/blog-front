@@ -3,13 +3,13 @@ import { NavLink } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../store/selectors';
-import { ARTICLE_LIST_MODE, FETCH_MODE } from '../../../store/article/types';
+import { ARTICLE_LIST_MODE } from '../../../store/article/types';
 
 import Container from '../../Container/Container';
 import ArticleList from '../../Articles/ArticleList/ArticleList';
 import PopularTag from '../../Tags/PopularTag/PopularTag';
 import './Homepage.scss';
-import { getTags, setFetchMode } from '../../../store/article/actions';
+import { getTags } from '../../../store/article/actions';
 
 const Homepage: FC = () => {
   const [articleMode, setArticleMode] = useState<ARTICLE_LIST_MODE>(
@@ -18,7 +18,7 @@ const Homepage: FC = () => {
   const [tagList, setTagList] = useState<string[]>();
   const [tagName, setTagName] = useState<string | undefined>();
   const { user } = useTypedSelector((state) => state.user);
-  const { tags, fetchMode } = useTypedSelector((state) => state.article);
+  const { tags } = useTypedSelector((state) => state.article);
 
   const dispatch = useDispatch();
 

@@ -5,9 +5,8 @@ import {
   getFeedArticles,
   getGlobalArticles,
   getUserArticles,
-  setFetchMode,
 } from '../../../store/article/actions';
-import { ARTICLE_LIST_MODE, FETCH_MODE, IArticle } from '../../../store/article/types';
+import { ARTICLE_LIST_MODE, IArticle } from '../../../store/article/types';
 import { useTypedSelector } from '../../../store/selectors';
 import ArticleCard from '../ArticleCard/ArticleCard';
 import './ArticleList.scss';
@@ -20,8 +19,8 @@ interface IArticleListProps {
 
 const ArticleList: FC<IArticleListProps> = ({ mode, tag, username }) => {
   const { user } = useTypedSelector((state) => state.user);
-  const { articles, feedArticles, fetchMode } = useTypedSelector((state) => state.article);
-  const [currentArticles, setCurrentArticles] = useState<IArticle[] | null>(null);
+  const { articles, feedArticles } = useTypedSelector((state) => state.article);
+  const [currentArticles, setCurrentArticles] = useState<IArticle[]>([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -39,11 +38,14 @@ const ArticleList: FC<IArticleListProps> = ({ mode, tag, username }) => {
     if (mode === ARTICLE_LIST_MODE.PROFILE_MY_POSTS) {
       dispatch(getUserArticles(username!));
     }
+    if (mode === ARTICLE_LIST_MODE.PROFILE_FAVORITED_POSTS) {
+      dispatch(getGlobalArticles());
+    }
   }, []);
 
   const showArticles = (): any => {
-    return currentArticles?.map((el: any, i: any) => {
-      return <ArticleCard key={i} articleData={el} />;
+    return currentArticles?.map((elem: any, i: number) => {
+      return <ArticleCard key={i} articleData={elem} />;
     });
   };
 
@@ -64,17 +66,17 @@ const ArticleList: FC<IArticleListProps> = ({ mode, tag, username }) => {
 
   useEffect(() => {
     if (tag && mode === ARTICLE_LIST_MODE.HOMEPAGE_TAG_MODE) {
-      const filtredArticles = articles.filter((el: any) => el.tagList.includes(tag));
+      const filtredArticles = articles!.filter((elem: any) => elem.tagList.includes(tag));
       setCurrentArticles(filtredArticles);
     }
   }, [tag]);
 
   useEffect(() => {
-    if (fetchMode === FETCH_MODE.FETCHED) {
-      dispatch(setFetchMode(FETCH_MODE.RELAXED));
-      console.log('relax');
+    if (user && mode === ARTICLE_LIST_MODE.PROFILE_FAVORITED_POSTS) {
+      const filtredArticles = articles!.filter((elem: IArticle) => elem.favorited);
+      setCurrentArticles(filtredArticles);
     }
-  }, [fetchMode]);
+  }, [mode, articles]);
 
   if (!currentArticles)
     return (

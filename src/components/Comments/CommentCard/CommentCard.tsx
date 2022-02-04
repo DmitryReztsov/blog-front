@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteComment } from '../../../store/article/actions';
+import { deleteComment, setButtonFetchMode } from '../../../store/article/actions';
+import { BUTTON_FETCH_MODE } from '../../../store/article/types';
 import { useTypedSelector } from '../../../store/selectors';
-import { IUser } from '../../../store/user/types';
 import ArticleDate from '../../Articles/ArticleDate/ArticleDate';
 import ArticleIcon from '../../Articles/ArticleIcon/ArticleIcon';
 import ArticleUsername from '../../Articles/ArticleUsername/ArticleUsername';
@@ -17,9 +17,11 @@ interface ICommentCardProps {
 
 const CommentCard: FC<ICommentCardProps> = ({ text, username, date, slug, id }) => {
   const { user } = useTypedSelector((state) => state.user);
+  const { buttonFetchMode } = useTypedSelector((state) => state.article);
   const dispatch = useDispatch();
 
   const removeComment = (e: React.MouseEvent<HTMLButtonElement>) => {
+    dispatch(setButtonFetchMode(BUTTON_FETCH_MODE.FETCHING));
     dispatch(deleteComment(slug!, id!));
   };
 
@@ -39,8 +41,12 @@ const CommentCard: FC<ICommentCardProps> = ({ text, username, date, slug, id }) 
           </div>
         </div>
 
-        {user!.username === username && (
-          <button className="CommentCard-panel__btn" onClick={removeComment}>
+        {user && user!.username === username && (
+          <button
+            className="CommentCard-panel__btn"
+            onClick={removeComment}
+            disabled={buttonFetchMode === BUTTON_FETCH_MODE.FETCHING ? true : false}
+          >
             <i className="ion-trash-a"></i>
           </button>
         )}

@@ -1,8 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { favoriteArticle, setFetchMode, unfavoriteArticle } from '../../../store/article/actions';
-import { FAVORITE_BTN_MODE, FETCH_MODE, IArticle } from '../../../store/article/types';
+import {
+  favoriteArticle,
+  setButtonFetchMode,
+  unfavoriteArticle,
+} from '../../../store/article/actions';
+import { BUTTON_FETCH_MODE, FAVORITE_BTN_MODE, IArticle } from '../../../store/article/types';
 import { useTypedSelector } from '../../../store/selectors';
 import './FavoriteArticleBtn.scss';
 
@@ -12,7 +16,7 @@ interface IFavoriteArticleBtnProps {
 }
 
 const FavoriteArticleBtn: FC<IFavoriteArticleBtnProps> = ({ article, mode }) => {
-  const { fetchMode } = useTypedSelector((state) => state.article);
+  const { buttonFetchMode } = useTypedSelector((state) => state.article);
   const { user } = useTypedSelector((state) => state.user);
   const [text, setText] = useState<string>();
   const [favorite, setFavorite] = useState<boolean>();
@@ -24,7 +28,7 @@ const FavoriteArticleBtn: FC<IFavoriteArticleBtnProps> = ({ article, mode }) => 
     if (!user) {
       return navigate('/login');
     }
-    dispatch(setFetchMode(FETCH_MODE.FETCHING));
+    dispatch(setButtonFetchMode(BUTTON_FETCH_MODE.FETCHING));
     article!.favorited
       ? dispatch(unfavoriteArticle(article!.slug!))
       : dispatch(favoriteArticle(article!.slug!));
@@ -50,7 +54,7 @@ const FavoriteArticleBtn: FC<IFavoriteArticleBtnProps> = ({ article, mode }) => 
   return (
     <button
       className={favorite ? 'FavoriteArticleBtn favorited' : 'FavoriteArticleBtn'}
-      disabled={fetchMode == FETCH_MODE.FETCHING ? true : false}
+      disabled={buttonFetchMode == BUTTON_FETCH_MODE.FETCHING ? true : false}
       onClick={favoriteHandler}
     >
       <i className="ion-heart"></i>
@@ -59,4 +63,4 @@ const FavoriteArticleBtn: FC<IFavoriteArticleBtnProps> = ({ article, mode }) => 
   );
 };
 
-export default React.memo(FavoriteArticleBtn);
+export default FavoriteArticleBtn;

@@ -2,8 +2,7 @@ import React, { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setEditArticle, setEditorMode } from '../../../store/article/actions';
-import { EDITOR_MODE, IArticle, IArticleState } from '../../../store/article/types';
-import { useTypedSelector } from '../../../store/selectors';
+import { EDITOR_MODE, IArticle } from '../../../store/article/types';
 import './EditArticleBtn.scss';
 
 interface IEditArticleBtnPpops {
@@ -13,7 +12,6 @@ interface IEditArticleBtnPpops {
 const EditArticleBtn: FC<IEditArticleBtnPpops> = ({ article }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { editArticle, editorMode } = useTypedSelector<IArticleState>((state) => state.article);
 
   const changeArticle = () => {
     dispatch(setEditArticle(article!));
