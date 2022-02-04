@@ -1,9 +1,12 @@
 import React, { FC, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { removeArticle, setFetchMode } from '../../../store/article/actions';
-import { FETCH_MODE } from '../../../store/article/types';
 import { useTypedSelector } from '../../../store/selectors';
+import {
+  removeArticle,
+  setButtonFetchMode,
+  setFormFetchMode,
+} from '../../../store/article/actions';
+import { BUTTON_FETCH_MODE, FORM_FETCH_MODE } from '../../../store/article/types';
 import './DeleteArticleBtn.scss';
 
 interface IDeleteArticleBtnProps {
@@ -11,25 +14,22 @@ interface IDeleteArticleBtnProps {
 }
 
 const DeleteArticleBtn: FC<IDeleteArticleBtnProps> = ({ slug }) => {
-  const { fetchMode } = useTypedSelector((state) => state.article);
+  const { buttonFetchMode } = useTypedSelector((state) => state.article);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   // delete article and redirect to home
   const deleteArticle = () => {
-    dispatch(setFetchMode(FETCH_MODE.FETCHING));
+    dispatch(setFormFetchMode(FORM_FETCH_MODE.FETCHING));
+    dispatch(setButtonFetchMode(BUTTON_FETCH_MODE.FETCHING));
     dispatch(removeArticle(slug!));
   };
 
-  useEffect(() => {
-    if (fetchMode === FETCH_MODE.FETCHED) {
-      dispatch(setFetchMode(FETCH_MODE.RELAXED));
-      navigate(`/`);
-    }
-  }, [fetchMode]);
-
   return (
-    <button className="DeleteArticleBtn" onClick={deleteArticle}>
+    <button
+      className="DeleteArticleBtn"
+      onClick={deleteArticle}
+      disabled={buttonFetchMode === BUTTON_FETCH_MODE.FETCHING ? true : false}
+    >
       <i className="ion-trash-a"></i>&nbsp;Delete Article
     </button>
   );

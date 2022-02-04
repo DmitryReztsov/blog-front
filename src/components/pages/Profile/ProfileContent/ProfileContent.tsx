@@ -1,9 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { FC, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { setFetchMode } from '../../../../store/article/actions';
-import { ARTICLE_LIST_MODE, FETCH_MODE } from '../../../../store/article/types';
-import { useTypedSelector } from '../../../../store/selectors';
+import { ARTICLE_LIST_MODE } from '../../../../store/article/types';
 import ArticleList from '../../../Articles/ArticleList/ArticleList';
 import './ProfileContent.scss';
 
@@ -12,8 +9,6 @@ interface IProfileContentProps {
 }
 
 const ProfileContentInner: FC<IProfileContentProps> = ({ username }) => {
-  const { fetchMode } = useTypedSelector((state) => state.article.fetchMode);
-  const dispatch = useDispatch();
   const [profileMode, setProfileMode] = useState<ARTICLE_LIST_MODE>(
     ARTICLE_LIST_MODE.PROFILE_MY_POSTS
   );

@@ -18,13 +18,17 @@ export interface IArticleState {
   editorMode: EDITOR_MODE;
   tags: string[] | undefined;
   error: Error | undefined;
-  fetchMode: FETCH_MODE;
-  comments: any;
+  formFetchMode: FORM_FETCH_MODE;
+  buttonFetchMode: BUTTON_FETCH_MODE;
+  comments: IComment[] | [];
+  newArticle: {
+    title: string;
+  };
 }
 
 export type ArticleAction = {
   type: string;
-  payload?: any;
+  payload: any;
 };
 
 export enum ArticleActionTypes {
@@ -38,12 +42,14 @@ export enum ArticleActionTypes {
   GET_FEED_ARTICLES = 'GET_FEED_ARTICLES',
   GET_GLOBAL_ARTICLES = 'GET_GLOBAL_ARTICLES',
   GET_TAGS = 'GET_TAGS',
-  SET_FETCH_MODE = 'SET_FETCH_MODE',
+  SET_FORM_FETCH_MODE = 'SET_FORM_FETCH_MODE',
+  SET_BUTTON_FETCH_MODE = 'SET_BUTTON_FETCH_MODE',
   FAVORITE_ARTICLE = 'FAVORITE_ARTICLE',
   UNFAVORITE_ARTICLE = 'UNFAVORITE_ARTICLE',
   ADD_COMMENT = 'ADD_COMMENT',
   DELETE_COMMENT = 'DELETE_COMMENT',
   GET_COMMENTS = 'GET_COMMENTS',
+  SET_NEW_ARTICLE = 'SET_NEW_ARTICLE',
 }
 
 export enum URLS {
@@ -75,8 +81,14 @@ export enum EDITOR_MODE {
   EDIT_MODE = 'EDIT_MODE',
 }
 
-export enum FETCH_MODE {
-  RELAXED = 'RELAXED',
+export enum FORM_FETCH_MODE {
+  NO_FETCH = 'NO_FETCH',
+  FETCHING = 'FETCHING',
+  FETCHED = 'FETCHED',
+}
+
+export enum BUTTON_FETCH_MODE {
+  NO_FETCH = 'NO_FETCH',
   FETCHING = 'FETCHING',
   FETCHED = 'FETCHED',
 }
@@ -97,4 +109,13 @@ export enum FETCH_METHOD {
 export enum FAVORITE_BTN_MODE {
   CARD_MODE = 'CARD_MODE',
   ARTICLE_MODE = 'ARTICLE_MODE',
+}
+
+export interface IComment {
+  author: {
+    username: string;
+  };
+  body: string;
+  createdAt: string;
+  id: string;
 }

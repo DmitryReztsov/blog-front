@@ -7,7 +7,9 @@ import {
   IArticle,
   URLS,
   EDITOR_MODE,
-  FETCH_MODE,
+  FORM_FETCH_MODE,
+  BUTTON_FETCH_MODE,
+  IArticleState,
 } from './types';
 
 // add article
@@ -28,7 +30,7 @@ export const addArticle = (body: IArticle) => async (dispatch: Dispatch<ArticleA
 
   dispatch({
     type: ArticleActionTypes.ADD_ARTICLE,
-    payload: { articles: data, fetchMode: FETCH_MODE.FETCHED },
+    payload: { articles: data, formFetchMode: FORM_FETCH_MODE.FETCHED },
   });
 };
 
@@ -52,7 +54,7 @@ export const updateArticle =
 
     dispatch({
       type: ArticleActionTypes.UPDATE_ARTICLE,
-      payload: { articles: data, fetchMode: FETCH_MODE.FETCHED },
+      payload: { articles: data, formFetchMode: FORM_FETCH_MODE.FETCHED },
     });
   };
 
@@ -76,7 +78,7 @@ export const removeArticle = (slug: string) => async (dispatch: Dispatch<Article
   {
     dispatch({
       type: ArticleActionTypes.REMOVE_ARTICLE,
-      payload: { articles: data, fetchMode: FETCH_MODE.FETCHED },
+      payload: { articles: data, buttonFetchMode: BUTTON_FETCH_MODE.FETCHED },
     });
   }
 };
@@ -173,10 +175,17 @@ export const getTags = () => async (dispatch: Dispatch<ArticleAction>) => {
   dispatch({ type: ArticleActionTypes.GET_TAGS, payload: { tags: data, error } });
 };
 
-// set fetch mode
-export const setFetchMode = (fetchMode: FETCH_MODE) => (dispatch: Dispatch<ArticleAction>) => {
-  dispatch({ type: ArticleActionTypes.SET_FETCH_MODE, payload: { fetchMode } });
-};
+// set fetch mode for forms
+export const setFormFetchMode =
+  (formFetchMode: FORM_FETCH_MODE) => (dispatch: Dispatch<ArticleAction>) => {
+    dispatch({ type: ArticleActionTypes.SET_FORM_FETCH_MODE, payload: { formFetchMode } });
+  };
+
+// set fetch mode for buttons
+export const setButtonFetchMode =
+  (buttonFetchMode: BUTTON_FETCH_MODE) => (dispatch: Dispatch<ArticleAction>) => {
+    dispatch({ type: ArticleActionTypes.SET_BUTTON_FETCH_MODE, payload: { buttonFetchMode } });
+  };
 
 // favorite article
 export const favoriteArticle = (slug: string) => async (dispatch: Dispatch<ArticleAction>) => {
@@ -196,7 +205,7 @@ export const favoriteArticle = (slug: string) => async (dispatch: Dispatch<Artic
 
   dispatch({
     type: ArticleActionTypes.FAVORITE_ARTICLE,
-    payload: { articles: data, fetchMode: FETCH_MODE.FETCHED },
+    payload: { articles: data, buttonFetchMode: BUTTON_FETCH_MODE.FETCHED },
   });
 };
 
@@ -218,7 +227,7 @@ export const unfavoriteArticle = (slug: string) => async (dispatch: Dispatch<Art
 
   dispatch({
     type: ArticleActionTypes.UNFAVORITE_ARTICLE,
-    payload: { articles: data, fetchMode: FETCH_MODE.FETCHED },
+    payload: { articles: data, buttonFetchMode: BUTTON_FETCH_MODE.FETCHED },
   });
 };
 
@@ -237,7 +246,7 @@ export const addComment =
 
     dispatch({
       type: ArticleActionTypes.ADD_COMMENT,
-      payload: { comments: data, fetchMode: FETCH_MODE.FETCHED },
+      payload: { comments: data, formFetchMode: FORM_FETCH_MODE.FETCHED },
     });
   };
 
@@ -257,7 +266,7 @@ export const deleteComment =
 
     dispatch({
       type: ArticleActionTypes.DELETE_COMMENT,
-      payload: { comments: data, fetchMode: FETCH_MODE.FETCHED },
+      payload: { comments: data, buttonFetchMode: BUTTON_FETCH_MODE.FETCHED },
     });
   };
 
@@ -274,6 +283,11 @@ export const getComments = (slug: string) => async (dispatch: Dispatch<ArticleAc
 
   dispatch({
     type: ArticleActionTypes.GET_COMMENTS,
-    payload: { comments: data, fetchMode: FETCH_MODE.FETCHED },
+    payload: { comments: data },
   });
+};
+
+// set new article
+export const setNewArticle = (title: string) => (dispatch: Dispatch<ArticleAction>) => {
+  dispatch({ type: ArticleActionTypes.SET_NEW_ARTICLE, payload: { newArticle: { title } } });
 };
