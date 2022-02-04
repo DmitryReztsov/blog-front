@@ -43,11 +43,11 @@ const CommentForm: FC<ICommentFormProps> = ({ slug }) => {
       <div className="CommentForm">
         {!user ? (
           <p className="CommentForm-unauthorise">
-            <Link to={'login'} className="CommentForm-unauthorise__link">
+            <Link to={'/login'} className="CommentForm-unauthorise__link">
               Sign in
             </Link>{' '}
             or{' '}
-            <Link to={'login'} className="CommentForm-unauthorise__link">
+            <Link to={'/register'} className="CommentForm-unauthorise__link">
               sign up
             </Link>{' '}
             to add comments on this article
