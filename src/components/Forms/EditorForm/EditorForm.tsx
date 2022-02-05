@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, ReactChild, ReactChildren, ReactElement, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../store/selectors';
 import {
@@ -8,13 +8,12 @@ import {
   setNewArticle,
   updateArticle,
 } from '../../../store/article/actions';
-import { EDITOR_MODE, FORM_FETCH_MODE, IArticle } from '../../../store/article/types';
+import { EDITOR_MODE, FETCH_MODE, IArticle } from '../../../store/article/types';
 
 import FormError from '../../Errors/FormError/FormError';
 import FormTag from '../../Tags/FormTag/FormTag';
 
 import './EditorForm.scss';
-import { useNavigate } from 'react-router-dom';
 
 const EditorForm: FC = () => {
   // states from store
@@ -29,12 +28,14 @@ const EditorForm: FC = () => {
   const [description, setDescription] = useState<string>('');
   const [body, setBody] = useState<string>('');
   const [tagList, setTagList] = useState<string[]>([]);
+
   // tag form
   const [tag, setTag] = useState<string>('');
+
   // error form
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // fill the form fields if EDIT_MODE has been activated
+  // fill the form fields if editor mode (EDIT_MODE) has been activated
   useEffect(() => {
     if (editorMode === EDITOR_MODE.EDIT_MODE && editArticle) {
       setTitle(editArticle.title);
@@ -45,23 +46,25 @@ const EditorForm: FC = () => {
   }, []);
 
   // update article (EDIT_MODE)
-  const saveChanges = () => {
-    setErrorMessage(null);
-    dispatch(setEditorMode(EDITOR_MODE.CREATE_MODE));
-    dispatch(setFormFetchMode(FORM_FETCH_MODE.FETCHING));
-    dispatch(setNewArticle(title));
-    dispatch(updateArticle({ title, description, body, tagList }, editArticle!.slug!));
+  const saveChanges = (): void => {
+    if (editorMode === EDITOR_MODE.EDIT_MODE && editArticle) {
+      setErrorMessage(null);
+      dispatch(setEditorMode(EDITOR_MODE.CREATE_MODE));
+      dispatch(setFormFetchMode(FETCH_MODE.FETCHING));
+      dispatch(setNewArticle(title));
+      dispatch(updateArticle({ title, description, body, tagList }, editArticle.slug));
+    }
   };
 
   // add new Article {CREATE_MODE}
   const createArticle = (): void => {
-    setErrorMessage(null);
-    dispatch(setFormFetchMode(FORM_FETCH_MODE.FETCHING));
+    setErrorMessage('');
+    dispatch(setFormFetchMode(FETCH_MODE.FETCHING));
     dispatch(setNewArticle(title));
     dispatch(addArticle({ title, description, body, tagList }));
   };
 
-  // save form fileds for chanching ones
+  // save form fileds if has changed  these ones
   const changeFormHandler = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -80,7 +83,7 @@ const EditorForm: FC = () => {
   };
 
   // check form fields
-  const submitForm = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const submitForm = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     return !title.trim() // check title
       ? setErrorMessage("title can't be blank") // throw error
@@ -103,20 +106,22 @@ const EditorForm: FC = () => {
     return !twin.length;
   };
 
-  // Delete tag from tag-list
+  // delete tag from tag-list
   const deleteTag = (tag: string): void => {
-    const filteredTagList = tagList.filter((el) => el !== tag);
+    const filteredTagList = tagList.filter((elem: string) => elem !== tag);
     setTagList(filteredTagList);
   };
 
-  // Show tags in the form
+  // show tags in the form
   const showTagList = () => {
     if (tagList) {
-      return tagList.map((el, i) => <FormTag deleteTag={deleteTag} tag={el} key={i} />);
+      return tagList.map((elem: string, i: number) => (
+        <FormTag deleteTag={deleteTag} tag={elem} key={i} />
+      ));
     }
   };
 
-  // Add tag to tag-list
+  // add tag to tag-list
   const addTag = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.code === 'Enter') {
       e.preventDefault();
@@ -128,9 +133,7 @@ const EditorForm: FC = () => {
   };
 
   return (
-    <form
-      className={formFetchMode === FORM_FETCH_MODE.FETCHING ? 'EditorForm disabled' : 'EditorForm'}
-    >
+    <form className={formFetchMode === FETCH_MODE.FETCHING ? 'EditorForm disabled' : 'EditorForm'}>
       {errorMessage && <FormError text={errorMessage} />}
 
       <input
@@ -139,7 +142,7 @@ const EditorForm: FC = () => {
         type="text"
         placeholder="Article Title"
         value={title}
-        disabled={formFetchMode === FORM_FETCH_MODE.FETCHING ? true : false}
+        disabled={formFetchMode === FETCH_MODE.FETCHING ? true : false}
         onChange={changeFormHandler}
       />
 
@@ -149,7 +152,7 @@ const EditorForm: FC = () => {
         type="text"
         placeholder="What's this article about?"
         value={description}
-        disabled={formFetchMode === FORM_FETCH_MODE.FETCHING ? true : false}
+        disabled={formFetchMode === FETCH_MODE.FETCHING ? true : false}
         onChange={changeFormHandler}
       />
 
@@ -158,7 +161,7 @@ const EditorForm: FC = () => {
         name="body"
         placeholder="Write your article (in markdown)"
         value={body}
-        disabled={formFetchMode === FORM_FETCH_MODE.FETCHING ? true : false}
+        disabled={formFetchMode === FETCH_MODE.FETCHING ? true : false}
         onChange={changeFormHandler}
       />
 
@@ -169,7 +172,7 @@ const EditorForm: FC = () => {
         value={tag}
         placeholder="Enter tags"
         onKeyPress={addTag}
-        disabled={formFetchMode === FORM_FETCH_MODE.FETCHING ? true : false}
+        disabled={formFetchMode === FETCH_MODE.FETCHING ? true : false}
         onChange={changeFormHandler}
       />
 
@@ -179,7 +182,7 @@ const EditorForm: FC = () => {
         <button
           className="EditorForm-button"
           onClick={submitForm}
-          disabled={formFetchMode === FORM_FETCH_MODE.FETCHING ? true : false}
+          disabled={formFetchMode === FETCH_MODE.FETCHING ? true : false}
         >
           Publish Article
         </button>

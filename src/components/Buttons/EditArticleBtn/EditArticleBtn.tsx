@@ -1,19 +1,21 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { setEditArticle, setEditorMode } from '../../../store/article/actions';
 import { EDITOR_MODE, IArticle } from '../../../store/article/types';
+
 import './EditArticleBtn.scss';
 
 interface IEditArticleBtnPpops {
-  article: IArticle | undefined;
+  article: IArticle;
 }
 
 const EditArticleBtn: FC<IEditArticleBtnPpops> = ({ article }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
-  const changeArticle = () => {
+  // set edition mpde and redirect to editor page
+  const changeArticle = (e: React.MouseEvent<HTMLButtonElement>): void => {
     dispatch(setEditArticle(article!));
     dispatch(setEditorMode(EDITOR_MODE.EDIT_MODE));
     navigate(`/editor`);

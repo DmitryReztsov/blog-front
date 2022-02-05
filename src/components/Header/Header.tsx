@@ -1,21 +1,24 @@
 import React, { FC } from 'react';
-import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { useTypedSelector } from '../../store/selectors';
+import { useDispatch } from 'react-redux';
 import { setEditorMode } from '../../store/article/actions';
 import { EDITOR_MODE } from '../../store/article/types';
-import { useTypedSelector } from '../../store/selectors';
+
 import { URLS } from '../../utils/urls/urls';
 import Container from '../Container/Container';
 
 import './Header.scss';
 
 const Header: FC = () => {
+  // states from store
   const { user } = useTypedSelector((state) => state.user);
   const { editorMode } = useTypedSelector((state) => state.article);
+
   const dispatch = useDispatch();
 
   // set (EDITOR_MODE.CREATE_MODE) if user leave Edit page
-  const setCreateMode = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const setCreateMode = (e: React.MouseEvent<HTMLAnchorElement>): void => {
     if (editorMode !== EDITOR_MODE.CREATE_MODE) dispatch(setEditorMode(EDITOR_MODE.CREATE_MODE));
   };
 
@@ -38,6 +41,9 @@ const Header: FC = () => {
             >
               Home
             </NavLink>
+
+            {/* show/hide create article block if user was authorised or not */}
+            {/* create article block start */}
             {user ? (
               <>
                 <NavLink
@@ -48,6 +54,8 @@ const Header: FC = () => {
                 >
                   <i className="ion-compose">&nbsp;New Article</i>
                 </NavLink>
+
+                {/* user settings block */}
                 <NavLink
                   to={'/settings'}
                   className={({ isActive }) =>
@@ -58,6 +66,7 @@ const Header: FC = () => {
                   <i className="ion-gear-a start">&nbsp;Settings</i>
                 </NavLink>
 
+                {/*  user articles block */}
                 <NavLink
                   to={`/profile/${user.username}`}
                   className={({ isActive }) =>
@@ -75,6 +84,8 @@ const Header: FC = () => {
               </>
             ) : (
               <>
+                {/* show/hide login and register blocks if user was authorised or not */}
+                {/* login block */}
                 <NavLink
                   to={'/login'}
                   className={({ isActive }) =>
@@ -83,6 +94,8 @@ const Header: FC = () => {
                 >
                   Sign in
                 </NavLink>
+
+                {/* register block */}
                 <NavLink
                   to={'/register'}
                   className={({ isActive }) =>

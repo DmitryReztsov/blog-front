@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import './Profile.scss';
 import { getToken } from '../../../utils/common/common';
 import { IOptions } from '../../../utils/types/types';
-import { ProfileContent } from './ProfileContent/ProfileContent';
+import ProfileContent from './ProfileContent/ProfileContent';
 
 interface IProfile {
   username: string;
@@ -93,7 +93,7 @@ const Profile: FC = () => {
         </Container>
       </div>
       <Container>
-        <ProfileContent username={profile?.username} />
+        <ProfileContent username={profile!.username} />
       </Container>
     </div>
   );

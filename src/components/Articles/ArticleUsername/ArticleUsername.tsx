@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { FC, ReactElement } from 'react';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import './ArticleUsername.scss';
 
 interface IArticleUsernameProps {
@@ -9,12 +9,12 @@ interface IArticleUsernameProps {
 }
 
 const ArticleUsername: FC<IArticleUsernameProps> = ({ username, color, size }) => {
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   return (
     <div
       className={`ArticleUsername ${color} ${size}`}
-      onClick={() => navigate(`/profile/${username}`)}
+      onClick={() => navigate(`/profile/${username}`)} // redirect to user profile
     >
       {username}
     </div>
