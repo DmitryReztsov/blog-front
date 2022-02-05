@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '../../../store/selectors';
 import {
@@ -6,21 +6,23 @@ import {
   setButtonFetchMode,
   setFormFetchMode,
 } from '../../../store/article/actions';
-import { BUTTON_FETCH_MODE, FORM_FETCH_MODE } from '../../../store/article/types';
+import { FETCH_MODE } from '../../../store/article/types';
+
 import './DeleteArticleBtn.scss';
 
 interface IDeleteArticleBtnProps {
-  slug: string | undefined;
+  slug: string;
 }
 
 const DeleteArticleBtn: FC<IDeleteArticleBtnProps> = ({ slug }) => {
+  // state from store
   const { buttonFetchMode } = useTypedSelector((state) => state.article);
   const dispatch = useDispatch();
 
-  // delete article and redirect to home
+  // delete article and redirect to home page
   const deleteArticle = () => {
-    dispatch(setFormFetchMode(FORM_FETCH_MODE.FETCHING));
-    dispatch(setButtonFetchMode(BUTTON_FETCH_MODE.FETCHING));
+    dispatch(setFormFetchMode(FETCH_MODE.FETCHING));
+    dispatch(setButtonFetchMode(FETCH_MODE.FETCHING));
     dispatch(removeArticle(slug!));
   };
 
@@ -28,7 +30,7 @@ const DeleteArticleBtn: FC<IDeleteArticleBtnProps> = ({ slug }) => {
     <button
       className="DeleteArticleBtn"
       onClick={deleteArticle}
-      disabled={buttonFetchMode === BUTTON_FETCH_MODE.FETCHING ? true : false}
+      disabled={buttonFetchMode === FETCH_MODE.FETCHING ? true : false}
     >
       <i className="ion-trash-a"></i>&nbsp;Delete Article
     </button>

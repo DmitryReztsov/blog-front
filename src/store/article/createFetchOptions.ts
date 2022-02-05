@@ -1,10 +1,10 @@
 import { getToken } from '../../utils/common/common';
-import { fetchOptions, IArticle } from './types';
+import { fetchOptions, FETCH_METHOD, IArticle, IArticleCreateProps } from './types';
 
 export const createFetchOptions = () => {
-  const addArticleOptions = (data: IArticle): fetchOptions => {
+  const addArticleOptions = (data: IArticleCreateProps): fetchOptions => {
     return {
-      method: 'POST',
+      method: FETCH_METHOD.POST,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -13,9 +13,9 @@ export const createFetchOptions = () => {
     };
   };
 
-  const updateArticleOptions = (data: IArticle): fetchOptions => {
+  const updateArticleOptions = (data: IArticleCreateProps): fetchOptions => {
     return {
-      method: 'PUT',
+      method: FETCH_METHOD.PUT,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -26,7 +26,7 @@ export const createFetchOptions = () => {
 
   const removeArticleOptions = (): fetchOptions => {
     return {
-      method: 'DELETE',
+      method: FETCH_METHOD.DELETE,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -36,7 +36,7 @@ export const createFetchOptions = () => {
 
   const getArticleOptions = (): fetchOptions => {
     return {
-      method: 'GET',
+      method: FETCH_METHOD.GET,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -46,7 +46,7 @@ export const createFetchOptions = () => {
 
   const getFeedArticlesOptions = (): fetchOptions => {
     return {
-      method: 'GET',
+      method: FETCH_METHOD.GET,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -56,7 +56,7 @@ export const createFetchOptions = () => {
 
   const getUserArticlesOptions = (): fetchOptions => {
     return {
-      method: 'GET',
+      method: FETCH_METHOD.GET,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -66,7 +66,7 @@ export const createFetchOptions = () => {
 
   const getGlobalArticlesOptions = (): fetchOptions => {
     return {
-      method: 'GET',
+      method: FETCH_METHOD.GET,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -76,7 +76,7 @@ export const createFetchOptions = () => {
 
   const getTagsOptions = (): fetchOptions => {
     return {
-      method: 'GET',
+      method: FETCH_METHOD.GET,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
       },
@@ -85,7 +85,7 @@ export const createFetchOptions = () => {
 
   const favoriteArticleOptions = (): fetchOptions => {
     return {
-      method: 'POST',
+      method: FETCH_METHOD.POST,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -95,7 +95,7 @@ export const createFetchOptions = () => {
 
   const unfavoriteArticleOptions = (): fetchOptions => {
     return {
-      method: 'DELETE',
+      method: FETCH_METHOD.DELETE,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -105,7 +105,7 @@ export const createFetchOptions = () => {
 
   const addCommentOptions = (data: string): fetchOptions => {
     return {
-      method: 'POST',
+      method: FETCH_METHOD.POST,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -116,7 +116,7 @@ export const createFetchOptions = () => {
 
   const deleteCommentOptions = (): fetchOptions => {
     return {
-      method: 'DELETE',
+      method: FETCH_METHOD.DELETE,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,
@@ -126,7 +126,7 @@ export const createFetchOptions = () => {
 
   const getCommentsOptions = (): fetchOptions => {
     return {
-      method: 'GET',
+      method: FETCH_METHOD.GET,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Token ${getToken()}`,

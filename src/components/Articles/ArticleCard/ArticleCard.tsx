@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FAVORITE_BTN_MODE } from '../../../store/article/types';
-import FavoriteArticleBtn from '../../Buttons/FavoriteArticleBtn/FavoriteArticleBtn';
+import React, { FC, ReactElement } from 'react';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { FAVORITE_BTN_MODE, IArticle } from '../../../store/article/types';
 
+import FavoriteArticleBtn from '../../Buttons/FavoriteArticleBtn/FavoriteArticleBtn';
 import CardTag from '../../Tags/CardTag/CardTag';
 import ArticleDate from '../ArticleDate/ArticleDate';
 import ArticleIcon from '../ArticleIcon/ArticleIcon';
@@ -10,59 +10,56 @@ import ArticleUsername from '../ArticleUsername/ArticleUsername';
 
 import './ArticleCard.scss';
 
-interface IArticleProps {
-  articleData: {
-    author: any;
-    createdAt: any;
-    favoritesCount: number;
-    title: string;
-    description: string;
-    body: string;
-    tagList: string[] | [];
-    slug: string;
-    favorited: boolean;
-  };
+interface IArticleCardProps {
+  article: IArticle;
 }
 
-const ArticleCard: FC<IArticleProps> = ({ articleData }) => {
-  const navigate = useNavigate();
+const ArticleCard: FC<IArticleCardProps> = ({ article }) => {
+  const navigate: NavigateFunction = useNavigate();
 
-  const linkToArticle = (e: React.MouseEvent) => {
-    navigate(`/article/${articleData.title}`);
+  // redirect to article on click
+  const linkToArticle = (e: React.MouseEvent<HTMLDivElement>): void => {
+    navigate(`/article/${article.title}`);
   };
 
-  if (!articleData) return <></>;
+  // if no article return empty
+  if (!article) return <></>;
 
   return (
     <div className="ArticleCard">
+      {/* ----- Article banner start ------ */}
       <div className="ArticleCard-top">
         <div className="ArticleCard-top__userBlock">
-          <ArticleIcon username={articleData.author.username} />
+          <ArticleIcon username={article.author.username} />
           <div className="ArticleCard-top__props">
-            <ArticleUsername username={articleData.author.username} />
+            <ArticleUsername username={article.author.username} />
             <div className="ArticleCard-top__props_date">
-              {<ArticleDate date={articleData.createdAt} />}
+              {<ArticleDate date={article.createdAt} />}
             </div>
           </div>
         </div>
-        <FavoriteArticleBtn article={articleData} mode={FAVORITE_BTN_MODE.CARD_MODE} />
+        <FavoriteArticleBtn article={article} mode={FAVORITE_BTN_MODE.CARD_MODE} />
       </div>
-
       <h1 className="ArticleCard-title" onClick={linkToArticle}>
-        {articleData.title}
+        {article.title}
       </h1>
+      {/* ----- Article banner end ------ */}
+      {/* ----- Article content start ------ */}
       <p className="ArticleCard-description" onClick={linkToArticle}>
-        {articleData.description}
+        {article.description}
       </p>
       <div className="ArticleCard-bottom">
         <div className="ArticleCard-bottom__read" onClick={linkToArticle}>
           Read more...
         </div>
+        {/* ----- Article content end ------ */}
+        {/* ----- Article tags start ------ */}
         <div className="ArticleCard-bottom__tag-list" onClick={linkToArticle}>
-          {articleData.tagList.map((el, i) => (
-            <CardTag key={i} tag={el} />
+          {article.tagList.map((elem: string, i: number) => (
+            <CardTag key={i} tag={elem} />
           ))}
         </div>
+        {/* ----- Article tags end ------ */}
       </div>
     </div>
   );

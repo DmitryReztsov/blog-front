@@ -1,15 +1,15 @@
-import React, { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { FC, ReactElement } from 'react';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { URLS } from '../../../utils/urls/urls';
 import './ArticleIcon.scss';
 
 interface IArticleIconProps {
-  username: string | undefined;
-  size?: string | undefined;
+  username: string;
+  size?: string;
 }
 
 const ArticleIcon: FC<IArticleIconProps> = ({ username, size }) => {
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   return (
     <img

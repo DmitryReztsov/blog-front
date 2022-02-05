@@ -12,49 +12,63 @@ import './Homepage.scss';
 import { getTags } from '../../../store/article/actions';
 
 const Homepage: FC = () => {
-  const [articleMode, setArticleMode] = useState<ARTICLE_LIST_MODE>(
-    ARTICLE_LIST_MODE.HOMEPAGE_GLOBAL_MODE
-  );
-  const [tagList, setTagList] = useState<string[]>();
-  const [tagName, setTagName] = useState<string | undefined>();
+  // states from store
   const { user } = useTypedSelector((state) => state.user);
   const { tags } = useTypedSelector((state) => state.article);
 
+  // article mod state
+  const [articleMode, setArticleMode] = useState<ARTICLE_LIST_MODE>(
+    ARTICLE_LIST_MODE.HOMEPAGE_GLOBAL_MODE
+  );
+
+  const [tagList, setTagList] = useState<string[]>();
+  const [tagName, setTagName] = useState<string | undefined>();
+
   const dispatch = useDispatch();
 
+  // get popular tags
   useEffect(() => {
     dispatch(getTags());
   }, []);
 
+  // save popular tags to state
   useEffect(() => {
     if (tags) {
       setTagList(tags);
     }
   }, [tags]);
 
-  const getArticlesByTag = (tag: string, e?: React.MouseEventHandler<HTMLParagraphElement>) => {
+  // show article, filtered on tag
+  const getArticlesByTag = (
+    tag: string,
+    e?: React.MouseEventHandler<HTMLParagraphElement>
+  ): void => {
     setTagName(tag);
     setArticleMode(ARTICLE_LIST_MODE.HOMEPAGE_TAG_MODE);
   };
 
   return (
     <div className="Homepage">
+      {/* show/hide this block: authorised or not */}
       {!user && (
         <div className="Homepage-banner">
           <Container>
             <h1 className="Homepage-banner__title">conduit</h1>
             <p className="Homepage-banner__text">
               A place to share your
-              <span className="Homepage-banner__text_react">&nbsp;React&nbsp;</span>
+              <span className="Homepage-banner__text_react">
+                {}React{}
+              </span>
               knowledge.
             </p>
           </Container>
         </div>
       )}
+
       <Container>
         <div className="Homepage-row">
           <div className="Homepage-content">
-            {/* Lists of articles start */}
+            {/* feed articles block */}
             <nav className="Homepage-content__navbar">
               <NavLink
                 className={
@@ -67,6 +81,8 @@ const Homepage: FC = () => {
               >
                 Your Feed
               </NavLink>
+
+              {/* global articles block */}
               <NavLink
                 className={
                   articleMode === ARTICLE_LIST_MODE.HOMEPAGE_GLOBAL_MODE
@@ -78,6 +94,8 @@ const Homepage: FC = () => {
               >
                 Global Feed
               </NavLink>
+
+              {/* tag articles block */}
               <div
                 className={
                   articleMode === ARTICLE_LIST_MODE.HOMEPAGE_TAG_MODE
@@ -92,6 +110,7 @@ const Homepage: FC = () => {
               </div>
             </nav>
 
+            {/* show feed/global/tag articles by activated mode */}
             {articleMode === ARTICLE_LIST_MODE.HOMEPAGE_FEED_MODE && (
               <ArticleList mode={articleMode} />
             )}
@@ -101,23 +120,21 @@ const Homepage: FC = () => {
             {articleMode === ARTICLE_LIST_MODE.HOMEPAGE_TAG_MODE && (
               <ArticleList mode={articleMode} tag={tagName} />
             )}
-            {/* Lists of articles end */}
           </div>
 
-          {/* Lists of popular tags start */}
+          {/* popular tags block */}
           <div className="Homepage-sidebar">
             <div className="Homepage-sidebar__block">
               <div className="Homepage-sidebar__logo">Popular Tags</div>
               <div className="Homepage-sidebar__tagList">
                 {tagList &&
-                  tagList.map((el, i) => {
+                  tagList.map((elem: string, i: number) => {
                     if (i > 10) return;
-                    return <PopularTag tag={el} key={i} getArticlesByTag={getArticlesByTag} />;
+                    return <PopularTag tag={elem} key={i} getArticlesByTag={getArticlesByTag} />;
                   })}
               </div>
             </div>
           </div>
-          {/* Lists of popular tags end */}
         </div>
       </Container>
     </div>

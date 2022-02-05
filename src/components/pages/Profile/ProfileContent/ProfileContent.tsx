@@ -1,14 +1,16 @@
 import React, { FC, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ARTICLE_LIST_MODE } from '../../../../store/article/types';
+
 import ArticleList from '../../../Articles/ArticleList/ArticleList';
 import './ProfileContent.scss';
 
 interface IProfileContentProps {
-  username: string | undefined;
+  username: string;
 }
 
-const ProfileContentInner: FC<IProfileContentProps> = ({ username }) => {
+const ProfileContent: FC<IProfileContentProps> = ({ username }) => {
+  // article's list mode state
   const [profileMode, setProfileMode] = useState<ARTICLE_LIST_MODE>(
     ARTICLE_LIST_MODE.PROFILE_MY_POSTS
   );
@@ -17,6 +19,7 @@ const ProfileContentInner: FC<IProfileContentProps> = ({ username }) => {
     <div className="ProfileContent">
       <div className="ProfileContent-content">
         <nav className="ProfileContent-navbar">
+          {/* user articles block */}
           <NavLink
             className={
               profileMode === ARTICLE_LIST_MODE.PROFILE_MY_POSTS
@@ -28,6 +31,8 @@ const ProfileContentInner: FC<IProfileContentProps> = ({ username }) => {
           >
             My Posts
           </NavLink>
+
+          {/* favorited articles block */}
           <NavLink
             className={
               profileMode === ARTICLE_LIST_MODE.PROFILE_FAVORITED_POSTS
@@ -41,6 +46,7 @@ const ProfileContentInner: FC<IProfileContentProps> = ({ username }) => {
           </NavLink>
         </nav>
 
+        {/* show user/favorited articles by activated mode */}
         {profileMode === ARTICLE_LIST_MODE.PROFILE_MY_POSTS && (
           <ArticleList mode={profileMode} username={username} />
         )}
@@ -52,4 +58,4 @@ const ProfileContentInner: FC<IProfileContentProps> = ({ username }) => {
   );
 };
 
-export const ProfileContent = React.memo(ProfileContentInner);
+export default ProfileContent;

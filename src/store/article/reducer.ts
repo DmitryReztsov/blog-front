@@ -1,11 +1,4 @@
-import {
-  ArticleAction,
-  ArticleActionTypes,
-  BUTTON_FETCH_MODE,
-  EDITOR_MODE,
-  FORM_FETCH_MODE,
-  IArticleState,
-} from './types';
+import { ArticleAction, ArticleActionTypes, EDITOR_MODE, FETCH_MODE, IArticleState } from './types';
 
 const initialState: IArticleState = {
   articles: undefined,
@@ -14,8 +7,9 @@ const initialState: IArticleState = {
   editorMode: EDITOR_MODE.CREATE_MODE,
   tags: undefined,
   error: undefined,
-  formFetchMode: FORM_FETCH_MODE.NO_FETCH,
-  buttonFetchMode: BUTTON_FETCH_MODE.NO_FETCH,
+  formFetchMode: FETCH_MODE.NO_FETCH,
+  buttonFetchMode: FETCH_MODE.NO_FETCH,
+  articleFetchMode: FETCH_MODE.NO_FETCH,
   comments: [],
   newArticle: { title: '' },
 };
@@ -39,9 +33,6 @@ export function articleReducer(
         buttonFetchMode: action.payload.buttonFetchMode,
       };
 
-    // case ArticleActionTypes.GET_ARTICLE:
-    //   return { ...state, error: action.payload.user };
-
     case ArticleActionTypes.SET_EDIT_ARTICLE:
       return { ...state, editArticle: action.payload.editArticle };
 
@@ -49,13 +40,25 @@ export function articleReducer(
       return { ...state, editorMode: action.payload.editorMode };
 
     case ArticleActionTypes.GET_USER_ARTICLES:
-      return { ...state, ...action.payload.articles };
+      return {
+        ...state,
+        ...action.payload.articles,
+        articleFetchMode: action.payload.articleFetchMode,
+      };
 
     case ArticleActionTypes.GET_FEED_ARTICLES:
-      return { ...state, feedArticles: action.payload.feedArticles.articles };
+      return {
+        ...state,
+        feedArticles: action.payload.feedArticles.articles,
+        articleFetchMode: action.payload.articleFetchMode,
+      };
 
     case ArticleActionTypes.GET_GLOBAL_ARTICLES:
-      return { ...state, ...action.payload.articles };
+      return {
+        ...state,
+        ...action.payload.articles,
+        articleFetchMode: action.payload.articleFetchMode,
+      };
 
     case ArticleActionTypes.GET_TAGS:
       return { ...state, ...action.payload.tags };
@@ -65,6 +68,9 @@ export function articleReducer(
 
     case ArticleActionTypes.SET_BUTTON_FETCH_MODE:
       return { ...state, buttonFetchMode: action.payload.buttonFetchMode };
+
+    case ArticleActionTypes.SET_ARTICLE_FETCH_MODE:
+      return { ...state, articleFetchMode: action.payload.articleFetchMode };
 
     case ArticleActionTypes.FAVORITE_ARTICLE:
       return {
@@ -91,7 +97,11 @@ export function articleReducer(
       };
 
     case ArticleActionTypes.GET_COMMENTS:
-      return { ...state, ...action.payload.comments };
+      return {
+        ...state,
+        ...action.payload.comments,
+        articleFetchMode: action.payload.articleFetchMode,
+      };
 
     case ArticleActionTypes.SET_NEW_ARTICLE:
       return { ...state, newArticle: action.payload.newArticle };

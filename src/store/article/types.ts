@@ -1,14 +1,14 @@
 export interface IArticle {
-  slug?: string;
+  slug: string;
   title: string;
   description: string;
   body: string;
-  author?: { username: string };
+  author: { username: string };
   tagList: string[] | [];
   favoritesCount?: number;
-  comments?: string[] | [];
-  createdAt?: string;
-  favorited?: boolean;
+  comments: string[] | [];
+  createdAt: string;
+  favorited: boolean;
 }
 
 export interface IArticleState {
@@ -18,18 +18,34 @@ export interface IArticleState {
   editorMode: EDITOR_MODE;
   tags: string[] | undefined;
   error: Error | undefined;
-  formFetchMode: FORM_FETCH_MODE;
-  buttonFetchMode: BUTTON_FETCH_MODE;
+  formFetchMode: FETCH_MODE;
+  buttonFetchMode: FETCH_MODE;
+  articleFetchMode: FETCH_MODE;
   comments: IComment[] | [];
   newArticle: {
     title: string;
   };
 }
 
-export type ArticleAction = {
-  type: string;
-  payload: any;
-};
+export interface IArticleCreateProps {
+  title: string;
+  description: string;
+  body: string;
+  tagList: string[] | [];
+}
+
+export interface IComment {
+  author: {
+    username: string;
+  };
+  body: string;
+  createdAt: string;
+  id: string;
+}
+
+export interface ICommentCreateProps {
+  body: string;
+}
 
 export enum ArticleActionTypes {
   ADD_ARTICLE = 'ADD_ARTICLE',
@@ -44,6 +60,7 @@ export enum ArticleActionTypes {
   GET_TAGS = 'GET_TAGS',
   SET_FORM_FETCH_MODE = 'SET_FORM_FETCH_MODE',
   SET_BUTTON_FETCH_MODE = 'SET_BUTTON_FETCH_MODE',
+  SET_ARTICLE_FETCH_MODE = 'SET_ARTICLE_FETCH_MODE',
   FAVORITE_ARTICLE = 'FAVORITE_ARTICLE',
   UNFAVORITE_ARTICLE = 'UNFAVORITE_ARTICLE',
   ADD_COMMENT = 'ADD_COMMENT',
@@ -81,22 +98,16 @@ export enum EDITOR_MODE {
   EDIT_MODE = 'EDIT_MODE',
 }
 
-export enum FORM_FETCH_MODE {
-  NO_FETCH = 'NO_FETCH',
-  FETCHING = 'FETCHING',
-  FETCHED = 'FETCHED',
-}
-
-export enum BUTTON_FETCH_MODE {
+export enum FETCH_MODE {
   NO_FETCH = 'NO_FETCH',
   FETCHING = 'FETCHING',
   FETCHED = 'FETCHED',
 }
 
 export type fetchOptions = {
-  method: string;
+  method: FETCH_METHOD;
   headers: { 'Content-Type': string; Authorization?: string };
-  body?: any;
+  body?: string;
 };
 
 export enum FETCH_METHOD {
@@ -111,11 +122,116 @@ export enum FAVORITE_BTN_MODE {
   ARTICLE_MODE = 'ARTICLE_MODE',
 }
 
-export interface IComment {
-  author: {
-    username: string;
+type AddArticleAction = {
+  type: ArticleActionTypes.ADD_ARTICLE;
+  payload: { articles: IArticle[]; formFetchMode: FETCH_MODE };
+};
+
+type UpdateArticleAction = {
+  type: ArticleActionTypes.UPDATE_ARTICLE;
+  payload: { articles: IArticle[]; formFetchMode: FETCH_MODE };
+};
+
+type RemoveArticleAction = {
+  type: ArticleActionTypes.REMOVE_ARTICLE;
+  payload: {
+    articles: IArticle[];
+    buttonFetchMode: FETCH_MODE;
+    formFetchMode: FETCH_MODE;
   };
-  body: string;
-  createdAt: string;
-  id: string;
-}
+};
+
+type SetEditArticleAction = {
+  type: ArticleActionTypes.SET_EDIT_ARTICLE;
+  payload: { editArticle: IArticle };
+};
+
+type SetEditModeAction = {
+  type: ArticleActionTypes.SET_EDITOR_MODE;
+  payload: { editorMode: EDITOR_MODE };
+};
+
+type GetUserArticlesAction = {
+  type: ArticleActionTypes.GET_USER_ARTICLES;
+  payload: { articles: IArticle[]; articleFetchMode: FETCH_MODE };
+};
+
+type GetFeedArticleAction = {
+  type: ArticleActionTypes.GET_FEED_ARTICLES;
+  payload: { feedArticles: { articles: IArticle[] }; articleFetchMode: FETCH_MODE };
+};
+
+type GetGlobalArticleAction = {
+  type: ArticleActionTypes.GET_GLOBAL_ARTICLES;
+  payload: { articles: IArticle[]; articleFetchMode: FETCH_MODE };
+};
+
+type GetTagsAction = {
+  type: ArticleActionTypes.GET_TAGS;
+  payload: { tags: string[] | [] };
+};
+
+type SetFormFetchModeAction = {
+  type: ArticleActionTypes.SET_FORM_FETCH_MODE;
+  payload: { formFetchMode: FETCH_MODE };
+};
+
+type SetButtonFetchModeAction = {
+  type: ArticleActionTypes.SET_BUTTON_FETCH_MODE;
+  payload: { buttonFetchMode: FETCH_MODE };
+};
+
+type SetArticleFetchModeAction = {
+  type: ArticleActionTypes.SET_ARTICLE_FETCH_MODE;
+  payload: { articleFetchMode: FETCH_MODE };
+};
+
+type FavoriteArticleAction = {
+  type: ArticleActionTypes.FAVORITE_ARTICLE;
+  payload: { articles: IArticle[]; buttonFetchMode: FETCH_MODE };
+};
+
+type UnfavoriteArticleAction = {
+  type: ArticleActionTypes.UNFAVORITE_ARTICLE;
+  payload: { articles: IArticle[]; buttonFetchMode: FETCH_MODE };
+};
+
+type AddCommentAction = {
+  type: ArticleActionTypes.ADD_COMMENT;
+  payload: { comments: IComment[] | []; formFetchMode: FETCH_MODE };
+};
+
+type DeleteCommentAction = {
+  type: ArticleActionTypes.DELETE_COMMENT;
+  payload: { comments: IComment[] | []; buttonFetchMode: FETCH_MODE };
+};
+
+type GetCommentsAction = {
+  type: ArticleActionTypes.GET_COMMENTS;
+  payload: { comments: IComment[] | []; articleFetchMode: FETCH_MODE };
+};
+
+type SetNewArticleAction = {
+  type: ArticleActionTypes.SET_NEW_ARTICLE;
+  payload: { newArticle: { title: string } };
+};
+
+export type ArticleAction =
+  | AddArticleAction
+  | UpdateArticleAction
+  | RemoveArticleAction
+  | SetEditArticleAction
+  | SetEditModeAction
+  | GetUserArticlesAction
+  | GetFeedArticleAction
+  | GetGlobalArticleAction
+  | GetTagsAction
+  | SetFormFetchModeAction
+  | SetButtonFetchModeAction
+  | FavoriteArticleAction
+  | UnfavoriteArticleAction
+  | AddCommentAction
+  | DeleteCommentAction
+  | GetCommentsAction
+  | SetNewArticleAction
+  | SetArticleFetchModeAction;

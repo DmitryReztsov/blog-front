@@ -3,7 +3,7 @@ import './PopularTag.scss';
 
 interface IPopularTagProps {
   tag: string;
-  getArticlesByTag: (tag: string, e?: React.MouseEventHandler<HTMLParagraphElement>) => void;
+  getArticlesByTag: (tag: string) => void;
 }
 
 const PopularTag: FC<IPopularTagProps> = ({ tag, getArticlesByTag }) => {
