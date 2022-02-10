@@ -13,7 +13,7 @@ import Container from '../../Container/Container';
 import ArticlePageTag from '../../Tags/ArticlePageTag/ArticlePageTag';
 import DeleteArticleBtn from '../../Buttons/DeleteArticleBtn/DeleteArticleBtn';
 import EditArticleBtn from '../../Buttons/EditArticleBtn/EditArticleBtn';
-import FolowUserBtn from '../../Buttons/FolowUserBtn/FolowUserBtn';
+import FolowUserBtn from '../../Buttons/FollowUserBtn/FolowUserBtn';
 import FavoriteArticleBtn from '../../Buttons/FavoriteArticleBtn/FavoriteArticleBtn';
 import ArticleIcon from '../../Articles/ArticleIcon/ArticleIcon';
 import ArticleUsername from '../../Articles/ArticleUsername/ArticleUsername';

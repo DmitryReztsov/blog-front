@@ -6,7 +6,7 @@ import ArticleList from '../../../Articles/ArticleList/ArticleList';
 import './ProfileContent.scss';
 
 interface IProfileContentProps {
-  username: string;
+  username: string | undefined;
 }
 
 const ProfileContent: FC<IProfileContentProps> = ({ username }) => {

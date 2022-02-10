@@ -93,7 +93,7 @@ const Profile: FC = () => {
         </Container>
       </div>
       <Container>
-        <ProfileContent username={profile!.username} />
+        <ProfileContent username={profile?.username} />
       </Container>
     </div>
   );
