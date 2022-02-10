@@ -13,7 +13,6 @@ import Container from '../../Container/Container';
 import ArticlePageTag from '../../Tags/ArticlePageTag/ArticlePageTag';
 import DeleteArticleBtn from '../../Buttons/DeleteArticleBtn/DeleteArticleBtn';
 import EditArticleBtn from '../../Buttons/EditArticleBtn/EditArticleBtn';
-import FolowUserBtn from '../../Buttons/FollowUserBtn/FolowUserBtn';
 import FavoriteArticleBtn from '../../Buttons/FavoriteArticleBtn/FavoriteArticleBtn';
 import ArticleIcon from '../../Articles/ArticleIcon/ArticleIcon';
 import ArticleUsername from '../../Articles/ArticleUsername/ArticleUsername';
@@ -23,6 +22,17 @@ import CommentForm from '../../Forms/CommentForm/CommentForm';
 import CommentList from '../../Comments/CommentList/CommentList';
 
 import './Article.scss';
+import FollowUserBtn from '../../Buttons/FollowUserBtn/FollowUserBtn';
+import { getToken } from '../../../utils/common/common';
+import { getUrl, URLS } from '../../../utils/urls/urls';
+import { IOptions } from '../../../utils/types/types';
+
+interface IProfile {
+  username: string;
+  bio: string;
+  image: string;
+  following: boolean;
+}
 
 const Article: FC = () => {
   // states from store
@@ -37,6 +47,36 @@ const Article: FC = () => {
 
   // get route params
   const params = useParams();
+
+  const [profile, setProfile] = useState<IProfile | null>(null);
+
+  const clickHandler = () => {
+    if (profile?.following === false) {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Token ${getToken()}` as string,
+        },
+      };
+      const url = getUrl(URLS.GET_USER) + `/${article?.author.username}` + '/follow';
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((data) => setProfile(data.profile));
+    } else {
+      const options = {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+          Authorization: `Token ${getToken()}` as string,
+        },
+      };
+      const url = getUrl(URLS.GET_USER) + `/${article?.author.username}` + '/follow';
+      fetch(url, options)
+        .then((response) => response.json())
+        .then((data) => setProfile(data.profile));
+    }
+  };
 
   // set button fetch mode (NO_FETCH) if has been activated (FETCHED) and reload articles
   useEffect(() => {
@@ -80,6 +120,20 @@ const Article: FC = () => {
     }
   }, [articles]);
 
+  useEffect(() => {
+    const token = getToken();
+    const options: IOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8',
+      },
+    };
+    if (token) options.headers.Authorization = `Token ${token}`;
+    fetch(getUrl(URLS.GET_USER) + `/${article?.author.username}`, options)
+      .then((response) => response.json())
+      .then((data) => setProfile(data.profile));
+  }, [article?.author.username]);
+
   // return this if article page has bee reloaded
   if (!article)
     return (
@@ -87,7 +141,6 @@ const Article: FC = () => {
         <NotFound />
       </>
     );
-
   return (
     <>
       <div className="Article">
@@ -119,7 +172,11 @@ const Article: FC = () => {
                   </>
                 ) : (
                   <>
-                    <FolowUserBtn username={article && article.author.username} />
+                    <FollowUserBtn
+                      username={article && article.author.username}
+                      click={() => clickHandler()}
+                      following={profile?.following}
+                    />
                     <FavoriteArticleBtn
                       article={article && article}
                       mode={FAVORITE_BTN_MODE.ARTICLE_MODE}
@@ -162,7 +219,11 @@ const Article: FC = () => {
                 </>
               ) : (
                 <>
-                  <FolowUserBtn username={article && article.author.username} />
+                  <FollowUserBtn
+                    username={article && article.author.username}
+                    click={() => clickHandler()}
+                    following={profile?.following}
+                  />
                   <FavoriteArticleBtn
                     article={article && article}
                     mode={FAVORITE_BTN_MODE.ARTICLE_MODE}
